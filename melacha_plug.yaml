@@ -13,10 +13,6 @@ substitutions:
   deg_shabbos_end:  "-8.5"      # time based off Alter Rebbe https://www.chabad.org/3209349
   deg_tzeit: "-6"
   
-  
-  test_degree: "-57.3"
-  
-  
 esphome:
   name: ${device_name}
   platform: ESP32                 # Switch this section
@@ -27,7 +23,6 @@ esphome:
     then:
       - switch.turn_on: shabbos_mode # ensures the device starts off in Shabbos mode
 
-
 wifi:
   ssid: !secret wifi_ssid2
   password: !secret wifi_password2
@@ -36,7 +31,6 @@ wifi:
   ap:
     ssid: "${friendly_name} Fallback Hotspot"
     password: ""
-
 
 #--------------------------------------------
 #------------- Advanced Section -------------
