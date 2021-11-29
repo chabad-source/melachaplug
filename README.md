@@ -7,7 +7,9 @@ A plug which turns off when it's Shabbos or Yom Tov.
 This project uses ESPHome as it's core.
 
 
-Looking to have your smart doorbell For those worried about Google or Alexa listening to you on Shabbos or Yom Tov, the solution is here.
+Looking to disable a smart doorbell for Shabbos?
+Worried about Google or Alexa listening to you on Shabbos or Yom Tov?
+The solution is here!
 
 
 ## Features
