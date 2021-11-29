@@ -1,9 +1,9 @@
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/44ce7dbbfb1e4dc1a7779f07bdd019fb)](https://www.codacy.com/gh/RebbePod/melacha_plug/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RebbePod/melacha_plug&amp;utm_campaign=Badge_Grade)
 
 
 # Melacha Plug
-A plug which turns off when it's Shabbos or Yom Tov.
-
+A [Melacha](https://www.chabad.org/95906/) aware plug which turns off when it's [Shabbos](https://www.chabad.org/633659/) or [Yom Tov](https://www.chabad.org/708510/).
 This project uses ESPHome as it's core.
 
 
