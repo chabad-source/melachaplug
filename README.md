@@ -5,7 +5,7 @@
 # Melacha Plug
 A [Melacha](https://www.chabad.org/95906/) aware plug which turns off when it's [Shabbos](https://www.chabad.org/633659/) or [Yom Tov](https://www.chabad.org/708510/).
 
-This project uses ESPHome as it's core.
+This project is based off [ESPHome](https://esphome.io/).
 
 
 Looking to disable a smart doorbell for Shabbos?
