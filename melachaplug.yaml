@@ -2,7 +2,7 @@
 #------------ User Configuration ------------
 #--------------------------------------------
 substitutions:
-  device_name: "melacha_plug"
+  device_name: "melachaplug"
   friendly_name: "Melacha Plug"
   
   relay_1_gpio: "13"              # Switch this section
@@ -17,7 +17,7 @@ esphome:
   name: ${device_name}
   platform: ESP32                 # Switch this section
   board: esp32doit-devkit-v1      # based on your chip
-  includes: shared/melacha_plug.h
+  includes: shared/melachaplug.h
   on_boot:
     priority: 800
     then:
