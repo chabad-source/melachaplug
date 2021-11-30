@@ -13,6 +13,8 @@ namespace MelachaPlug {
     hdate hdate;  // global varible for todays hebrew date
 
     void checkForIssurMelacha() {
+        // should only be run once were are certain the hebrew date is correct
+
         if (isassurbemelachah(hdate) == false) {
             ESP_LOGD("checkForIssurMelacha", "melacha permitted");
             // since its a weekday turn off Shabbos mode
@@ -33,7 +35,8 @@ namespace MelachaPlug {
         id(hebrew_date).publish_state( to_string(hdate.day) + "-" + to_string(hdate.month) + "-" + to_string(hdate.year) + " d-m-y (month starts from Nissan)" );
         MelachaPlug::checkForIssurMelacha();
     }
-
+    
+    // never really used
     void hdateDeductDay() {
         hdateaddday(&hdate, -1); // deducts one day to the hdate
         id(hebrew_date).publish_state( to_string(hdate.day) + "-" + to_string(hdate.month) + "-" + to_string(hdate.year) + " d-m-y (month starts from Nissan)" );
@@ -42,24 +45,25 @@ namespace MelachaPlug {
 
     void convertToHdate() {
         // gets triggered on every time sync
+
         struct tm tm_time_now = id(sntp_time).now().to_c_tm();
         hdate = convertDate(tm_time_now);   // convert current english date to the hebrew date
         ESP_LOGD("HDATE", "Year: %d Month: %d Day: %d", hdate.year, hdate.month, hdate.day);
         id(hebrew_date).publish_state( to_string(hdate.day) + "-" + to_string(hdate.month) + "-" + to_string(hdate.year) + " d-m-y (month starts from Nissan)" );
 
-        // since we are recalculating the hebrew day, we need to reverify and move forward the date if after Shabbos start/end time
+        // since we are recalculating the hebrew day, we need to reverify and move forward the date if it's after Shabbos start/end time
         float deg_to_calculate;
         // check if melacha is permitted today
         if (isassurbemelachah(hdate) == false) {
-            // since its a weeekday, we calculate hebrew day by Shabbos start time
+            // since its a weeekday, we calculate hebrew day starting from Shabbos start time
             deg_to_calculate = id(deg_shabbos_start_global);
         } else {
-            // since its a Shabbos or Yom Tov, we calculate hebrew day by Shabbos end time
+            // since its a Shabbos or Yom Tov, we calculate hebrew day starting from Shabbos end time
             deg_to_calculate = id(deg_shabbos_end_global);
         }
 
         auto current_time = id(sntp_time).now();
-        // check if current time is after 12 noon and before midnight, and the sun elevation is lower (which happens after) then either Shabbos start or end elevation degree
+        // check if current time is after 12 noon (and before midnight), and the sun elevation is lower (which happens after) then Shabbos start/end elevation degree
         if (current_time.hour > 12 && id(sun_elevation).state < deg_to_calculate ) {
             ESP_LOGD("convertToHdate", "it's between midnight and sunset");
             MelachaPlug::hdateAddDay();  // advance hebrew date
@@ -102,5 +106,3 @@ namespace MelachaPlug {
   
   
 } // namespace MelachaPlug
-
-
