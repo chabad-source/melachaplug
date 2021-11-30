@@ -1,6 +1,6 @@
 
 
-[![Melacha Plug Banner](https://github.com/chabad-source/melachaplug/blob/main/Melacha%20Plug%20Logo%20Crop.png)](https://github.com/chabad-source/melachaplug)
+[![Melacha Plug Banner]https://github.com/chabad-source/melachaplug/blob/main/images/Melacha%20Plug%20Logo%20Crop.png)](https://github.com/chabad-source/melachaplug)
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/44ce7dbbfb1e4dc1a7779f07bdd019fb)](https://www.codacy.com/gh/RebbePod/melacha_plug/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RebbePod/melacha_plug&amp;utm_campaign=Badge_Grade)
