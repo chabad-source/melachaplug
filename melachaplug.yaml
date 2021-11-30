@@ -2,7 +2,7 @@
 #------------ User Configuration ------------
 #--------------------------------------------
 substitutions:
-  device_name: "melachaplug"
+  device_name: "melachaplug"      # access using http://melachaplug.local/
   friendly_name: "Melacha Plug"
   
   relay_1_gpio: "13"              # Switch this section
