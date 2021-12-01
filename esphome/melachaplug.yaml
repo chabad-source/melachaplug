@@ -129,13 +129,17 @@ text_sensor:
     id: lat_text_sensor
     on_value:
       then:
-        lambda: "id(mysun).set_latitude(atof(x.c_str()));"
+        lambda: |-
+          id(mysun).set_latitude(atof(x.c_str()));
+          MelachaPlug::convertToHdate();       // recheck the hebrew date on location change 
   - platform: template
     name: ${friendly_name} Longitude
     id: lon_text_sensor
     on_value:
       then:
-        lambda: "id(mysun).set_longitude(atof(x.c_str()));"
+        lambda: |-
+          id(mysun).set_longitude(atof(x.c_str()));
+          MelachaPlug::convertToHdate();       // recheck the hebrew date on location change
   - platform: template
     name: ${friendly_name} Keyboard
     id: keyboard
