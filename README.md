@@ -58,3 +58,8 @@ You can customize this project for any sort of relays, includung the sonoff basi
 ### Shabbos Mode
 
 Shabbos from this project can be reused to be helpful in all types of projects.
+
+
+### Potential Use Cases
+
+- Those with motion based lights, can have the motion disabled on Shabbos and Yom Tov.

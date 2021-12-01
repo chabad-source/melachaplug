@@ -89,7 +89,6 @@ namespace MelachaPlug {
         MelachaPlug::checkForIssurMelacha();
     }
 
-
     void onShabbosEnd() {
         // gets triggered every day at the potential Shabbos or Yom Tov end time
 
@@ -103,6 +102,55 @@ namespace MelachaPlug {
 
         MelachaPlug::checkForIssurMelacha();
     }
-  
+
+    void autoSetLocation() {
+        HTTPClient http;
+        http.begin("http://ip-api.com/json/?fields=status,regionName,city,zip,lat,lon"); // API from http://ip-api.com/
+        int httpResponseCode = http.GET();
+        std::string payload = http.getString().c_str();
+        ESP_LOGD("autoSetLocation", "Curernt Location: %s", payload.c_str());
+        http.end();
+        
+        int start = payload.find("status") + 9;
+        int end = payload.find(",", start) - 1;
+        std::string status = payload.substr(start, end - start);
+        
+        if(status == "success") {
+            start = payload.find("lat") + 5;
+            end = payload.find(",", start);
+            std::string lat = payload.substr(start, end - start);
+            // float lat = parse_float(payload.substr(start, end - start)).value();
+            
+            start = payload.find("lon") + 5;
+            end = payload.find("}", start);
+            std::string lon = payload.substr(start, end - start);
+            // float lon = parse_float(payload.substr(start, end - start)).value();
+            
+            start = payload.find("city") + 7;
+            end = payload.find(",", start) - 1;
+            std::string city = payload.substr(start, end - start);
+            
+            start = payload.find("regionName") + 13;
+            end = payload.find(",", start) - 1;
+            std::string state = payload.substr(start, end - start);
+            
+            start = payload.find("zip") + 6;
+            end = payload.find(",", start) - 1;
+            std::string zip = payload.substr(start, end - start);
+            
+            ESP_LOGD("autoSetLocation", "status: %s, state: %s, city: %s, zip: %s, lat: %s, lon: %s", status.c_str(), state.c_str(), city.c_str(), zip.c_str(), lat.c_str(), lon.c_str());
+            id(auto_location_found).publish_state("Your in: " + city + ", " + state + " " + zip);
+            id(lat_text_sensor).publish_state(lat);
+            id(lon_text_sensor).publish_state(lon);
+        } else {
+            id(auto_location_found).publish_state("Failed to get your location");
+            ESP_LOGD("autoSetLocation", "Failed to get your location");
+        } 
+    }
+
+
+
+
+
   
 } // namespace MelachaPlug
