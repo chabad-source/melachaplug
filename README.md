@@ -23,19 +23,19 @@ The solution is here!
 ## Getting Started
 
 ### What You'll Need
-  - A plug with ESPHome or Tasmota software installed.
-  - Pre-flashed plugs can be bought from the [Athom](https://www.athom.tech/) or [Cloud Free](https://cloudfree.shop/) shop.
+-   A plug with ESPHome or Tasmota software installed.
+-   Pre-flashed plugs can be bought from the [Athom](https://www.athom.tech/) or [Cloud Free](https://cloudfree.shop/) shop.
 
 ## Installation
 
 ### Pre-configured
-  - Download the melachaplug.bin file from above.
-  - If your device is using Tasmota, follow instructions on how to upgrade from the [ESPHome docs](https://esphome.io/guides/migrate_sonoff_tasmota.html) or [Tasmota docs](https://tasmota.github.io/docs/Upgrading/#upgrade-using-webui).
-  - If your device is using ESPHome, use the web UI to install the firmware.
+-   Download the melachaplug.bin file from above.
+-   If your device is using Tasmota, follow instructions on how to upgrade from the [ESPHome docs](https://esphome.io/guides/migrate_sonoff_tasmota.html) or [Tasmota docs](https://tasmota.github.io/docs/Upgrading/#upgrade-using-webui).
+-   If your device is using ESPHome, use the web UI to install the firmware.
 
 ### Custom Configuration
-  - Set up your own ESPhome instance. If you have [Home Assistant](https://www.home-assistant.io/) then use the [ESPHome Dashboard](https://esphome.io/guides/getting_started_hassio.html), otherwise use their [Command Line Interface](https://esphome.io/guides/getting_started_command_line.html) guide.
-  - Configure the YAML settings to your liking, and flash device (more details on the ESPHome site).
+-   Set up your own ESPhome instance. If you have [Home Assistant](https://www.home-assistant.io/) then use the [ESPHome Dashboard](https://esphome.io/guides/getting_started_hassio.html), otherwise use their [Command Line Interface](https://esphome.io/guides/getting_started_command_line.html) guide.
+-   Configure the YAML settings to your liking, and flash device (more details on the ESPHome site).
 
 ## Advanced
 
@@ -49,4 +49,4 @@ Shabbos from this project can be reused to be helpful in all types of projects.
 
 ### Potential Use Cases
 
-  - Those with motion based lights, can have the motion disabled on Shabbos and Yom Tov.
+-    Those with motion based lights, can have the motion disabled on Shabbos and Yom Tov.
