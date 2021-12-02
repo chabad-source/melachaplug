@@ -211,7 +211,7 @@ switch:
     pin: ${built_in_led_gpio}
     restore_mode: "ALWAYS_OFF"
 
-  # Shabbos mode switch - here is where we set what happens when it's on and off
+  # Shabbos mode switch - here is where we set what happens when it turns on and off
   - platform: template
     name: ${friendly_name} Shabbos Mode
     id: shabbos_mode
