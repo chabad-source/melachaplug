@@ -44,7 +44,7 @@ esphome:
     - priority: -100.0
       then:
         - lambda: |-
-            if (id(auto_location_detection).state == true) {
+            if (!id(lat_global) || !id(lon_global)) {
               MelachaPlug::autoSetLocation();
             }
 
@@ -135,6 +135,7 @@ text_sensor:
     on_value:
       then:
         lambda: |-
+          id(lat_global) = atof(x.c_str());    // set the global variable to store it on reboot
           id(mysun).set_latitude(atof(x.c_str()));
           MelachaPlug::convertToHdate();       // recheck the hebrew date on location change 
   - platform: template
@@ -143,6 +144,7 @@ text_sensor:
     on_value:
       then:
         lambda: |-
+          id(lon_global) = atof(x.c_str());    // set the global variable to store it on reboot
           id(mysun).set_longitude(atof(x.c_str()));
           MelachaPlug::convertToHdate();       // recheck the hebrew date on location change
   - platform: template
@@ -233,7 +235,7 @@ switch:
     turn_on_action:
     - while:
         condition:
-          lambda: 'return true;'
+          lambda: "return true;"
         then:
         - switch.turn_on: built_in_led
         - delay: 500ms 
@@ -242,8 +244,9 @@ switch:
     turn_off_action:
     - switch.turn_off: built_in_led
 
-  # toggle auto location detection
+  # update auto detect location
   - platform: template
-    name: ${friendly_name} Auto Location Detection
-    optimistic: yes
-    id: auto_location_detection
+    name: ${friendly_name} Auto Detect Location
+    turn_on_action:
+      then:
+        - lambda: "MelachaPlug::autoSetLocation();"
