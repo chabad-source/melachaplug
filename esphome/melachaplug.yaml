@@ -38,13 +38,14 @@ esphome:
   name: ${device_name}
   includes: shared/melachaplug.h
   on_boot:
-    - priority: 800
+    - priority: 800                      # This is where all hardware initialization of vital components is executed
       then:
-        - switch.turn_on: shabbos_mode # ensures the device starts off in Shabbos mode
-    - priority: -100.0
+        - switch.turn_on: shabbos_mode      # ensures the device starts off in Shabbos mode
+    - priority: -100.0                   # pretty much everything should already be initialized
       then:
         - lambda: |-
-            if (!id(lat_global) || !id(lon_global)) {
+            // check if the global latitude or longitude is blank
+            if (id(lat_global) || id(lon_global) != true) {
               MelachaPlug::autoSetLocation();
             }
 
