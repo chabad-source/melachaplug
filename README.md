@@ -13,7 +13,7 @@ Worried about Google or Alexa listening to you on Shabbos or Yom Tov?
 The solution is here!
 
 ## Features
--   [x][] Smart: A full Jewish Calendar onboard, it knows when Yom Tov is. 
+-   [x] Smart: A full Jewish Calendar onboard, it knows when Yom Tov is. 
 -   [x] Failsafe: Buttons will be disabled on Shabbos. 
 -   [x] Intelligent: Auto detects your location with the option to customize. 
 -   [x] Aware: LED flash lets you know when Shabbos mode is enabled.
@@ -41,13 +41,10 @@ The solution is here!
 ## Advanced
 
 ### Using Relays
-
 You can customize this project for any sort of relays, includung the sonoff basic. 
 
 ### Shabbos Mode
-
 Shabbos from this project can be reused to be helpful in all types of projects.
 
 ### Potential Use Cases
-
 -   Those with motion based lights, can have the motion disabled on Shabbos and Yom Tov.
