@@ -45,8 +45,8 @@ namespace MelachaPlug {
 
     void convertToHdate() {
         // gets triggered on every time sync
-
-        struct tm tm_time_now = id(sntp_time).now().to_c_tm();
+        auto current_time = id(sntp_time).now();
+        struct tm tm_time_now = current_time.to_c_tm();
         hdate = convertDate(tm_time_now);   // convert current english date to the hebrew date
         ESP_LOGD("HDATE", "Year: %d Month: %d Day: %d", hdate.year, hdate.month, hdate.day);
         id(hebrew_date).publish_state( to_string(hdate.day) + "-" + to_string(hdate.month) + "-" + to_string(hdate.year) + " d-m-y (month starts from Nissan)" );
@@ -61,8 +61,7 @@ namespace MelachaPlug {
             // since its a Shabbos or Yom Tov, we calculate hebrew day starting from Shabbos end time
             deg_to_calculate = id(deg_shabbos_end_global);
         }
-
-        auto current_time = id(sntp_time).now();
+        
         // check if current time is after 12 noon (and before midnight), and the sun elevation is lower (which happens after) then Shabbos start/end elevation degree
         if (current_time.hour > 12 && id(sun_elevation).state < deg_to_calculate ) {
             ESP_LOGD("convertToHdate", "it's between midnight and sunset");
