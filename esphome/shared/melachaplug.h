@@ -22,7 +22,7 @@ namespace MelachaPlug {
                 id(shabbos_mode).turn_off(); // turn off Shabbos mode
             }
         } else {
-            ESP_LOGD("checkForIssurMelacha", "melacha perhibited");
+            ESP_LOGD("checkForIssurMelacha", "melacha prohibited");
             // since its Shabbos or Yom Tov turn on Shabbos mode
             if (id(shabbos_mode).state == false) {
                 id(shabbos_mode).turn_on(); // turn on Shabbos mode
