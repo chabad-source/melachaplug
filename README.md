@@ -34,7 +34,7 @@ The solution is here!
 *Limitations*
 -   Timezone won't be set to your specific location.
 -   Your location won't be 100% accurate. 
-
+*Instructions*
 -   Download the melachaplug.bin file from above.
 -   If your device is using Tasmota, follow instructions on how to upgrade from the [ESPHome docs](https://esphome.io/guides/migrate_sonoff_tasmota.html) or [Tasmota docs](https://tasmota.github.io/docs/Upgrading/#upgrade-using-webui).
 -   If your device is using ESPHome, use the web UI to install the firmware.
