@@ -115,27 +115,27 @@ namespace MelachaPlug {
         std::string status = payload.substr(start, end - start);
         
         if(status == "success") {
+            start = payload.find("regionName") + 13;
+            end = payload.find(",", start) - 1;
+            std::string state = payload.substr(start, end - start);
+            
+            start = payload.find("city") + 7;
+            end = payload.find(",", start) - 1;
+            std::string city = payload.substr(start, end - start);
+            
+            start = payload.find("zip") + 6;
+            end = payload.find(",", start) - 1;
+            std::string zip = payload.substr(start, end - start);
+
             start = payload.find("lat") + 5;
             end = payload.find(",", start);
             std::string lat = payload.substr(start, end - start);
             // float lat = parse_float(payload.substr(start, end - start)).value();
             
             start = payload.find("lon") + 5;
-            end = payload.find("}", start);
+            end = payload.find("}", start); // it's the end of the json therefor look for '}'
             std::string lon = payload.substr(start, end - start);
             // float lon = parse_float(payload.substr(start, end - start)).value();
-            
-            start = payload.find("city") + 7;
-            end = payload.find(",", start) - 1;
-            std::string city = payload.substr(start, end - start);
-            
-            start = payload.find("regionName") + 13;
-            end = payload.find(",", start) - 1;
-            std::string state = payload.substr(start, end - start);
-            
-            start = payload.find("zip") + 6;
-            end = payload.find(",", start) - 1;
-            std::string zip = payload.substr(start, end - start);
             
             ESP_LOGD("autoSetLocation", "status: %s, state: %s, city: %s, zip: %s, lat: %s, lon: %s", status.c_str(), state.c_str(), city.c_str(), zip.c_str(), lat.c_str(), lon.c_str());
             id(auto_location_found).publish_state("Your in: " + city + ", " + state + " " + zip);
@@ -144,12 +144,20 @@ namespace MelachaPlug {
         } else {
             id(auto_location_found).publish_state("Failed to get your location");
             ESP_LOGD("autoSetLocation", "Failed to get your location");
-        } 
+        }
     }
 
-
-
-
-
-  
+    void onBoot() {
+        // check if manual location is set to false
+        if (id(manual_location) == false) {
+            // check if the global latitude or longitude is blank (or 0)
+            if (id(lat_global) || id(lon_global) != true) {
+                MelachaPlug::autoSetLocation();
+            } else {
+                // set the location based off the saved globals
+                id(lat_text_sensor).publish_state( to_string( id(lat_global) ) );
+                id(lon_text_sensor).publish_state( to_string( id(lon_global) ) );
+            }
+        }
+    }
 } // namespace MelachaPlug
