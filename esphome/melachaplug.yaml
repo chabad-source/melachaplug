@@ -274,8 +274,8 @@
       id: keyboard_select
       update_interval: never
       optimistic: true
+      initial_option: ""
       options: 
-        - ""
         - "Repeat last character"
         - "1"
         - "2"
@@ -293,6 +293,7 @@
         - "CLEAR"
         - "Save to Latitude"
         - "Save to Longitude"
+        - ""
       on_value:
         - lambda: |-
             if (x == "BACKSPACE") {
