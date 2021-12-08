@@ -42,6 +42,7 @@ The solution is here!
 
 ### Custom Configuration
 -   Set up your own ESPhome instance. If you have [Home Assistant](https://www.home-assistant.io/) then use the [ESPHome Dashboard](https://esphome.io/guides/getting_started_hassio.html), otherwise use their [Command Line Interface](https://esphome.io/guides/getting_started_command_line.html) guide.
+-   Find the YAML file for your device from the esphome folder above.
 -   Configure the YAML settings to your liking, and flash device (more details on the ESPHome site).
 
 ## Advanced
