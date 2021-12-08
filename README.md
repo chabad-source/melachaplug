@@ -33,7 +33,7 @@ The solution is here!
 
 *Limitations*
 -   Timezone won't be set to your specific location.
--   Your location won't be 100% accurate. 
+-   Your location won't be 100% accurate (you can update it in web UI to the exact location). 
 
 *Instructions*
 -   Download the melachaplug.bin file from above.
