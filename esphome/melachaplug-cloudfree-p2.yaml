@@ -2,7 +2,7 @@
 #------------ User Configuration ------------
 #--------------------------------------------
   substitutions:
-    device_name: "melachaplug-cloudfree-p2"      # access web UI using http://melachaplug.local/ or it's IP
+    device_name: "melachaplug-cloudfree-p2"      # access web UI using http://melachaplug-cloudfree-p2.local/ or it's IP
     friendly_name: "Melacha Plug CloudFree P2"
     
     relay_1_gpio: "4"              # Switch this section
