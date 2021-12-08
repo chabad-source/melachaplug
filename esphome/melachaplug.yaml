@@ -6,8 +6,9 @@
     friendly_name: "Melacha Plug"
     
     relay_1_gpio: "13"              # Switch this section
-    built_in_led_gpio: "2"          # based on your chip
-    button_1_gpio:  "4"
+    button_1_gpio:  "4"             # based on your chip
+    built_in_led_gpio: "2"
+    led_inverted: "false"
     
     deg_shabbos_start:  "4"         # check a bit early just in case (shkiah is at -0.833)
     deg_shabbos_end:  "-8.5"        # time based off Alter Rebbe https://www.chabad.org/3209349
@@ -112,33 +113,46 @@
     - platform: sun
       name: ${friendly_name} Next Sunrise
       type: sunrise
+      format: "%l:%M:%S %p, %A"
+      update_interval: 3min
     - platform: sun
       name: ${friendly_name} Early Shabbos and Yom Tov Start (elevated ${deg_shabbos_start}°)
       type: sunset
+      format: "%l:%M:%S %p, %A"
+      update_interval: 3min
       elevation: ${deg_shabbos_start}°
     - platform: sun
       name: ${friendly_name} Next Sunset (elevated -0.833° - default)
       type: sunset
+      format: "%l:%M:%S %p, %A"
+      update_interval: 3min
     - platform: sun
       name: ${friendly_name} Tzeit Hakochavim - Nightfall (elevated ${deg_tzeit}°)
       type: sunset
+      format: "%l:%M:%S %p, %A"
+      update_interval: 3min
       elevation: ${deg_tzeit}°
     - platform: sun
       name: ${friendly_name} Shabbos and Yom Tov Ends (elevated ${deg_shabbos_end}°)
       type: sunset
+      format: "%l:%M:%S %p, %A"
+      update_interval: 3min
       elevation: ${deg_shabbos_end}°
   
     - platform: template
       name: ${friendly_name} Hebrew Date
       id: hebrew_date
+      update_interval: never
   
       # text sensor to display the auto generated location 
     - platform: template
       name: ${friendly_name} Auto Location Found
       id: auto_location_found
+      update_interval: never
     - platform: template
       name: ${friendly_name} Latitude
       id: lat_text_sensor
+      update_interval: never
       on_value:
         then:
           lambda: |-
@@ -148,6 +162,7 @@
     - platform: template
       name: ${friendly_name} Longitude
       id: lon_text_sensor
+      update_interval: never
       on_value:
         then:
           lambda: |-
@@ -157,6 +172,7 @@
     - platform: template
       name: ${friendly_name} Keyboard
       id: keyboard
+      update_interval: never
   
   # variables publicly available
   globals:
@@ -221,6 +237,7 @@
       id: built_in_led
       pin: ${built_in_led_gpio}
       restore_mode: "ALWAYS_OFF"
+      inverted: ${led_inverted}
   
     # Shabbos mode switch - here is where we set what happens when it turns on and off
     - platform: template
