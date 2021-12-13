@@ -190,17 +190,17 @@ namespace MelachaPlug {
             id(lat_text_sensor).publish_state( id(lat_and_lon_global).substr(0, separator) );
             id(lon_text_sensor).publish_state( id(lat_and_lon_global).substr( separator +1, id(lat_and_lon_global).length() ) );
             id(auto_location_found).publish_state("Using preprogrammed location");
-            ESP_LOGD("onBoot", "using preprogrammed location");
+            ESP_LOGD("onBoot", "Using preprogrammed location");
         } else if (id(lat_global) == 40.669010f && id(lon_global) == -73.942871f) {
             // default preprogrammed location hasn't been updated let's auto detect the location
             MelachaPlug::autoSetLocation();
-            ESP_LOGD("onBoot", "using auto location");
+            ESP_LOGD("onBoot", "Using auto location");
         } else {
             // otherwise use the global variable we have set
             id(lat_text_sensor).publish_state( to_string( id(lat_global) ) );
             id(lon_text_sensor).publish_state( to_string( id(lon_global) ) );
-            id(auto_location_found).publish_state("using saved location");
-            ESP_LOGD("onBoot", "using saved location");
+            id(auto_location_found).publish_state("Using saved location");
+            ESP_LOGD("onBoot", "Using saved location");
         }
     }
 
