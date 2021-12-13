@@ -2,7 +2,7 @@
 #------------ User Configuration ------------
 #--------------------------------------------
   substitutions:
-    device_name: "melachaplug"      # access web UI using http://melachaplug.local/ or it's IP
+    device_name: "melachaplug"      # access web UI using melachaplug.local/ or it's IP
     friendly_name: "Melacha Plug"
     
     relay_1_gpio: "13"              # Switch this section
@@ -11,14 +11,13 @@
     led_inverted: "false"
     
     deg_shabbos_start:  "4"         # check a bit early just in case (shkiah is at -0.833)
-    deg_shabbos_end:  "-8.5"        # time based off Alter Rebbe https://www.chabad.org/3209349
+    deg_shabbos_end:  "-8.5"        # time based off Alter Rebbe www.chabad.org/3209349
     deg_tzeit: "-6"
   
-    timezone: America/New_York      # check format https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+    timezone: America/New_York      # check format en.wikipedia.org/wiki/List_of_tz_database_time_zones
   
-    latitude: 40.66901°             # change to your location (important for proper zmanim)
-    longitude: -73.94287°           # 770 Chabad Lubavitch World Headquarters
-    manual_location: "false"          # change to true if you are setting the location above
+    latitude: "40.669010"            # change to your location (important for proper zmanim)
+    longitude: "-73.942871"          # 770 Chabad Lubavitch World Headquarters
   
   # Switch this section based on your chip
   # esp8266:
@@ -50,23 +49,31 @@
           - switch.turn_on: shabbos_mode      # ensures the device starts off in Shabbos mode
       - priority: -100.0                   # pretty much everything should already be initialized
         then:
-          - lambda: "MelachaPlug::onBoot();"
+          - logger.log: "--- Waiting for time sync ---"
+          - wait_until:
+              lambda: 'return id(sntp_time).now().is_valid();'
+          - logger.log: "--- time & sun state set ---"
+          - lambda: 'MelachaPlug::onBoot();'
   
   # frequency of data flushed to the flash
   preferences:
-    flash_write_interval: 5min
+    flash_write_interval: 1min
   
   # Enable logging
   logger:
   
   # Enable Home Assistant API
   api:
+    reboot_timeout: 0s              # no need to connect to HA so no reboot necessary
   
   # Enable Over The Air updates
   ota:
   
   # Enable Web Interface
   web_server:
+    port: 80
+    include_internal: true
+  
   
   # Enable HTTP Requests (for auto location API)
   http_request:
@@ -81,8 +88,8 @@
       update_interval: 60min
       on_time_sync:
         then:
-          - lambda: |-
-              MelachaPlug::convertToHdate();
+          - lambda: 'MelachaPlug::onTimeSync();'
+  
   
   # Enable Sun calculations 
   sun:
@@ -93,88 +100,87 @@
     on_sunset:
       - elevation: ${deg_shabbos_start}° # degree to assume Shabbos or Yom Tov starts
         then:
-          - lambda: |-
-              MelachaPlug::onShabbosStart();
+          - lambda: 'MelachaPlug::onShabbosStart();'
   
       - elevation: ${deg_shabbos_end}° # degree that Shabbos or Yom Tov Ends
         then:
-          - lambda: |-
-              MelachaPlug::onShabbosEnd();
+          - lambda: 'MelachaPlug::onShabbosEnd();'
   
   # Sensors  
   sensor:
     - platform: sun
       name: ${friendly_name} Sun Elevation
-      id: sun_elevation
       type: elevation
+      internal: true
   
   # Text Sensors 
   text_sensor:
     - platform: sun
-      name: ${friendly_name} Next Sunrise
-      type: sunrise
-      format: "%l:%M:%S %p, %A"
-      update_interval: 3min
-    - platform: sun
       name: ${friendly_name} Early Shabbos and Yom Tov Start (elevated ${deg_shabbos_start}°)
+      internal: true
+      id: ts_shabbos_start
       type: sunset
       format: "%l:%M:%S %p, %A"
-      update_interval: 3min
+      update_interval: never
       elevation: ${deg_shabbos_start}°
     - platform: sun
       name: ${friendly_name} Next Sunset (elevated -0.833° - default)
+      internal: true
+      id: ts_sunset
       type: sunset
       format: "%l:%M:%S %p, %A"
-      update_interval: 3min
+      update_interval: never
     - platform: sun
       name: ${friendly_name} Tzeit Hakochavim - Nightfall (elevated ${deg_tzeit}°)
+      internal: true
+      id: ts_tzeit
       type: sunset
       format: "%l:%M:%S %p, %A"
-      update_interval: 3min
+      update_interval: never
       elevation: ${deg_tzeit}°
     - platform: sun
       name: ${friendly_name} Shabbos and Yom Tov Ends (elevated ${deg_shabbos_end}°)
+      internal: true
+      id: ts_shabbos_end
       type: sunset
       format: "%l:%M:%S %p, %A"
-      update_interval: 3min
+      update_interval: never
       elevation: ${deg_shabbos_end}°
   
     - platform: template
       name: ${friendly_name} Hebrew Date
+      internal: true
       id: hebrew_date
       update_interval: never
   
       # text sensor to display the auto generated location 
     - platform: template
       name: ${friendly_name} Auto Location Found
+      internal: true
       id: auto_location_found
       update_interval: never
+      
     - platform: template
       name: ${friendly_name} Latitude
       id: lat_text_sensor
       update_interval: never
       on_value:
         then:
-          lambda: |-
-            id(mysun).set_latitude(atof(x.c_str()));
-            id(lat_global) = atof(x.c_str());    // set the global variable to store it on reboot
-            MelachaPlug::convertToHdate();       // recheck the hebrew date on location change 
+          lambda: 'MelachaPlug::onLatitudeSet(x);'
     - platform: template
       name: ${friendly_name} Longitude
       id: lon_text_sensor
       update_interval: never
       on_value:
         then:
-          lambda: |-
-            id(mysun).set_longitude(atof(x.c_str()));
-            id(lon_global) = atof(x.c_str());    // set the global variable to store it on reboot
-            MelachaPlug::convertToHdate();       // recheck the hebrew date on location change
+          lambda: 'MelachaPlug::onLongitudeSet(x);'
     - platform: template
       name: ${friendly_name} Keyboard
+      internal: true
       id: keyboard
       update_interval: never
   
-  # variables publicly available
+  # variables publicly (internally) available
   globals:
     - id: deg_shabbos_start_global
       type: float
@@ -184,19 +190,20 @@
       type: float
       restore_value: no
       initial_value: ${deg_shabbos_end}
-    
-    # Latitude and longitude that will save on reboot
+      
     - id: lat_global
       type: float
       restore_value: yes
+      initial_value: ${latitude}
     - id: lon_global
       type: float
       restore_value: yes
-    - id: manual_location
-      type: float
+      initial_value: ${longitude}
+    - id: lat_and_lon_global
+      type: std::string
       restore_value: no
-      initial_value: ${manual_location}
-  
+      initial_value: to_string(${latitude}) + "," + to_string(${longitude})
+      
   binary_sensor:
     - platform: gpio
       name: ${friendly_name} Button 1
@@ -226,14 +233,16 @@
   
     # switch which can disable the button
     - platform: gpio
-      name: ${friendly_name} Button 1 - Shabbos Switch
-      id: button_1_switch
+      name: ${friendly_name} Enable Button 1
+      internal: true
+      id: enable_1_switch
       pin: ${button_1_gpio}
       inverted: false
-      restore_mode: "ALWAYS_ON"
+      restore_mode: "ALWAYS_OFF"
   
     - platform: gpio
       name: ${friendly_name} Built-in LED
+      disabled_by_default: true
       id: built_in_led
       pin: ${built_in_led_gpio}
       restore_mode: "ALWAYS_OFF"
@@ -247,47 +256,59 @@
       turn_on_action:
         then:
           - switch.turn_off: relay_1           # turn off plug for Shabbos and Yom Tov
-          - switch.turn_off: button_1_switch   # disables button for Shabbos and Yom Tov
+          - switch.turn_off: enable_1_switch   # disables button for Shabbos and Yom Tov
           - switch.turn_on: flash_led
       turn_off_action:
         then:
           - switch.turn_off: flash_led         # must be before relay
-          - switch.turn_on: button_1_switch    # re-enable button for weekdays
+          - switch.turn_on: enable_1_switch    # re-enable button for weekdays
           - switch.turn_on: relay_1            # turn on plug for weekday
   
     # LED flash preset
     - platform: template
       name: ${friendly_name} Flash LED
+      disabled_by_default: true
       optimistic: yes
       id: flash_led
       turn_on_action:
       - while:
           condition:
-            lambda: "return true;"
+            lambda: 'return true;'
           then:
           - switch.turn_on: built_in_led
-          - delay: 500ms 
+          - delay: 75ms
           - switch.turn_off: built_in_led
-          - delay: 500ms
+          - delay: 75ms
+          - switch.turn_on: built_in_led
+          - delay: 75ms
+          - switch.turn_off: built_in_led
+          - delay: 2875ms
       turn_off_action:
       - switch.turn_off: built_in_led
   
     # update auto detect location
     - platform: template
       name: ${friendly_name} Auto Detect Location
+      disabled_by_default: true
       optimistic: yes
       turn_on_action:
-        - lambda: "MelachaPlug::autoSetLocation();"
+        - lambda: 'MelachaPlug::autoSetLocation();'
       turn_off_action:
-        - lambda: |-
-            id(lat_text_sensor).publish_state("0");
-            id(lon_text_sensor).publish_state("0");
-            id(manual_location) = true;
+        - text_sensor.template.publish:
+            id: lat_text_sensor
+            state: "0.0"    
+        - text_sensor.template.publish:
+            id: lon_text_sensor
+            state: "0.0"    
+        - text_sensor.template.publish:
+            id: auto_location_found
+            state: "Wait 60 seconds then reboot for changes to take effect"
             
   # To update the lat & lon from the web UI we use a select component
   select:
     - platform: template
       name: "Keyboard Select"
+      internal: true
       id: keyboard_select
       update_interval: never
       optimistic: true
@@ -312,30 +333,4 @@
         - "Save to Longitude"
         - ""
       on_value:
-        - lambda: |-
-            if (x == "BACKSPACE") {
-              if (!id(keyboard).state.empty()) {
-                std::string update = id(keyboard).state;
-                update.pop_back();
-                id(keyboard).publish_state(update);
-              }
-              
-            } else if(x == "CLEAR") {
-              id(keyboard).publish_state("");
-              
-            } else if(x == "Repeat last character") {
-              std::string update = id(keyboard).state;
-              update.push_back( update.back() );
-              id(keyboard).publish_state(update);
-              
-            } else if(x == "Save to Latitude") {
-              id(lat_text_sensor).publish_state(id(keyboard).state);
-              id(keyboard).publish_state("");
-              
-            } else if(x == "Save to Longitude") {
-              id(lon_text_sensor).publish_state(id(keyboard).state);
-              id(keyboard).publish_state("");
-              
-            } else {
-              id(keyboard).publish_state(id(keyboard).state + x.c_str());
-            }
+        - lambda: 'MelachaPlug::onKeyboardSelect(x);'
