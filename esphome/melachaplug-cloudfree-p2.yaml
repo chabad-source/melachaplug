@@ -5,19 +5,19 @@
     device_name: "melachaplug-cloudfree-p2"      # access web UI using http://melachaplug-cloudfree-p2.local/ or it's IP
     friendly_name: "Melacha Plug CloudFree P2"
     
-    relay_1_gpio: "4"              # Switch this section
-    button_1_gpio:  "13"             # based on your chip
+    relay_1_gpio: "4"                  # Switch this section
+    button_1_gpio:  "13"               # based on your chip
     built_in_led_gpio: "2"
     led_inverted: "true"
     
-    deg_shabbos_start:  "4"         # check a bit early just in case (shkiah is at -0.833)
-    deg_shabbos_end:  "-8.5"        # time based off Alter Rebbe https://www.chabad.org/3209349
+    deg_shabbos_start:  "4"            # check a bit early just in case (shkiah is at -0.833)
+    deg_shabbos_end:  "-8.5"           # time based off Alter Rebbe https://www.chabad.org/3209349
     deg_tzeit: "-6"
   
-    timezone: America/New_York      # check format https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+    timezone: America/New_York         # check format https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   
-    latitude: 40.66901°             # change to your location (important for proper zmanim)
-    longitude: -73.94287°           # 770 Chabad Lubavitch World Headquarters
+    latitude: 40.66901°                # change to your location (important for proper zmanim)
+    longitude: -73.94287°              # 770 Chabad Lubavitch World Headquarters
   
   # Switch this section based on your chip
   esp8266:
