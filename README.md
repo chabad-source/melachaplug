@@ -8,39 +8,4 @@ A [Melacha](https://www.chabad.org/95906/) aware plug which knows when it's [Sha
 
 This project is using [ESPHome](https://esphome.io/).
 
-Looking to disable a smart doorbell for Shabbos?
-Worried about Google or Alexa listening to you on Shabbos or Yom Tov?
-The solution is here!
-
-## Features
--   [x] Smart: A full Jewish Calendar onboard, it knows when Yom Tov is. 
--   [x] Failsafe: Buttons will be disabled on Shabbos. 
--   [x] Intelligent: Auto detects your location with the option to customize. 
--   [x] Aware: LED flash lets you know when Shabbos mode is enabled.
--   [x] Local: All logic is done on-board.
--   [x] Adaptable: All code is open source, tweak, correct and expand.
--   [x] Easy: Simply plug and play, your all set!
-
-## Getting Started
-
-### What You'll Need
--   A plug with ESPHome or Tasmota software installed.
--   Pre-flashed plugs can be bought from the [Athom](https://www.athom.tech/) or [Cloud Free](https://cloudfree.shop/) shop. There is also some sonoff s31 preflashed to be found on [Ebay](https://www.ebay.com/sch/i.html?_nkw=preflashed+smart+plug), and [Amazon](https://www.amazon.com/dp/B09D68P39F/).
-
-## Installation
-
-### Pre-configured
-
-*Limitations*
--   Timezone won't be set to your specific location.
--   Your location won't be 100% accurate (you can update it in web UI to be your exact location). 
-
-*Instructions*
--   Download the melachaplug.bin file from above.
--   If your device is using Tasmota, follow instructions on how to upgrade from the [ESPHome docs](https://esphome.io/guides/migrate_sonoff_tasmota.html) or [Tasmota docs](https://tasmota.github.io/docs/Upgrading/#upgrade-using-webui).
--   If your device is using ESPHome, use the web UI to install the firmware.
-
-### Custom Configuration
--   Set up your own ESPhome instance. If you have [Home Assistant](https://www.home-assistant.io/) then use the [ESPHome Dashboard](https://esphome.io/guides/getting_started_hassio.html), otherwise use their [Command Line Interface](https://esphome.io/guides/getting_started_command_line.html) guide.
--   Find the YAML file for your device from the esphome folder above.
--   Configure the YAML settings to your liking, and flash device (more details on the ESPHome site).
+For full readme [click here](https://github.com/chabad-source/melachaplug)
