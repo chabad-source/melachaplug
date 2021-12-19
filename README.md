@@ -8,4 +8,8 @@ A [Melacha](https://www.chabad.org/95906/) aware plug which knows when it's [Sha
 
 This project is using [ESPHome](https://esphome.io/).
 
-For full readme [click here](https://github.com/chabad-source/melachaplug)
+
+## Use Case
+To turn off Security cameras for a random minute during Shabbos or Yom Tov as a heter for public places (AYLOR before using yourself). 
+
+For full readme [click here](https://github.com/chabad-source/melachaplug).
