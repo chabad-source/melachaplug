@@ -4,7 +4,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f17caa6e3d2946378de9beae9fc0ffe8)](https://www.codacy.com/gh/chabad-source/melachaplug/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chabad-source/melachaplug&amp;utm_campaign=Badge_Grade)
 
 # Melacha Plug - Turns Off On A Random Minute
-A [Melacha](https://www.chabad.org/95906/) aware plug which turns off when it's [Shabbos](https://www.chabad.org/633659/) or [Yom Tov](https://www.chabad.org/708510/).
+A [Melacha](https://www.chabad.org/95906/) aware plug which knows when it's [Shabbos](https://www.chabad.org/633659/) or [Yom Tov](https://www.chabad.org/708510/), and will turn off for a random minute for every day that's Shabbos or Yom Tov. 
 
 This project is using [ESPHome](https://esphome.io/).
 
