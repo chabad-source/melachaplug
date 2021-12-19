@@ -12,4 +12,4 @@ This project is using [ESPHome](https://esphome.io/).
 ## Use Case
 To turn off Security cameras for a random minute during Shabbos or Yom Tov, as a heter for public places (AYLOR before use). 
 
-For full readme [click here](https://github.com/chabad-source/melachaplug).
+For a full readme [click here](https://github.com/chabad-source/melachaplug).
