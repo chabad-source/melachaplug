@@ -10,8 +10,8 @@ substitutions:
   built_in_led_gpio: "2"
   led_inverted: "true"
   
-  deg_shabbos_start:  "4"            # check a bit early just in case (shkiah is at -0.833)
-  deg_shabbos_end:  "-8.5"           # time based off Alter Rebbe https://www.chabad.org/3209349
+  deg_shabbos_start:  "2"            # check a bit early just in case (shkiah is at -0.833)
+  deg_shabbos_end:  "-9"             # time based off Alter Rebbe www.chabad.org/3209349 (added a bit extra)
   deg_tzeit: "-6"
 
   timezone: America/New_York         # check format https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
