@@ -94,7 +94,7 @@ namespace MelachaPlug {
         hdateaddday(&hdate, 1); // add one day to the hdate
     }
     
-    // never really used
+    // used 
     void hdateDeductDay() {
         hdateaddday(&hdate, -1); // deducts one day to the hdate
     }
@@ -174,6 +174,30 @@ namespace MelachaPlug {
         }
     }
 
+    void generateRandomMinute() {
+        // runs on every shabbos start time (and on boot)
+        time_t timestamp_start = id(sntp_time).timestamp_now();
+        time_t timestamp_end = id(mysun).sunset( id(deg_shabbos_end_global) )->timestamp;
+        timestamp_end = timestamp_end + 86400;  // add a day
+        ESP_LOGD("generateRandomMinute", "timestamp_start: %ld timestamp_end: %ld", timestamp_start, timestamp_end);
+        long int random_number = random(timestamp_start, timestamp_end);
+        ESP_LOGD("generateRandomMinute", "random_number: %ld", random_number);
+        random_number -= random_number % 60;
+        ESP_LOGD("generateRandomMinute", "random_number: %ld", random_number);
+
+        if (id(random_time_1) == 0){
+            id(random_time_1) = random_number;
+        } else {
+            id(random_time_2) = random_number;
+        }
+    }
+
+    void relayMomentarilyTurnOff() {
+        ESP_LOGD("relayMomentarilyTurnOff", "Turning the relay momentarily off");
+        id(relay_1).turn_off();
+        delay(60000); // delay 60 seconds
+        id(relay_1).turn_on();
+    }
 
     // -------------------------------------------------------------------------------------
 
@@ -202,6 +226,12 @@ namespace MelachaPlug {
             id(auto_location_found).publish_state("Using saved location");
             ESP_LOGD("onBoot", "Using saved location");
         }
+
+        // in case of reboot on Shabbos or Yom Tov
+        delay(2000); // delay 2 seconds
+        if (isassurbemelachah(hdate) == true) {
+            MelachaPlug::generateRandomMinute();
+        }
     }
 
     void onTimeSync() {
@@ -217,6 +247,7 @@ namespace MelachaPlug {
     void onShabbosStart() {
         // gets triggered every day at the potential Shabbos or Yom Tov start time
 
+        bool shabbos_end = false; // changes to true if nearing Shabbos or Yom Tov end (in-between shabbos_start and end times)
         // check if melacha is permitted today
         if (isassurbemelachah(hdate) == false) {
             // since its a weeekday calculate hebrew day by Shabbos start time
@@ -226,7 +257,20 @@ namespace MelachaPlug {
             MelachaPlug::updateTextSensors();
         } else {
             ESP_LOGD("onShabbosStart", "it's Shabbos or Yom Tov, wating for later zman to advance hebrew date");
+            MelachaPlug::hdateAddDay();
+            if (isassurbemelachah(hdate) == false) {
+                // right now it's in-between Shabbos start time and when Shabbos or Yom Tov ends
+                shabbos_end = true;
+            }
+            MelachaPlug::hdateDeductDay();
         }
+
+        if (isassurbemelachah(hdate) == true  && shabbos_end == false) {
+            // runs whether it's the first day or not
+            MelachaPlug::generateRandomMinute();
+        }
+
+
     }
 
     void onShabbosEnd() {
@@ -281,6 +325,23 @@ namespace MelachaPlug {
             id(auto_location_found).publish_state("Manual location entered");
         } else {
             id(keyboard).publish_state(id(keyboard).state + x.c_str());
+        }
+    }
+
+    void onInterval() {
+        time_t timestamp_current = id(sntp_time).timestamp_now();
+        ESP_LOGD("generateRandomMinute", "timestamp_current: %ld", timestamp_current);
+        timestamp_current -= timestamp_current % 60;
+        ESP_LOGD("generateRandomMinute", "timestamp_current: %ld", timestamp_current);
+        if (id(shabbos_mode).state == true) {
+            if (timestamp_current == id(random_time_1) ) {
+                id(random_time_1) = 0; // reset time
+                MelachaPlug::relayMomentarilyTurnOff();
+            } else if (timestamp_current == id(random_time_2) ) {
+                id(random_time_2) = 0; // reset time
+                MelachaPlug::relayMomentarilyTurnOff();
+            }
+
         }
     }
 
