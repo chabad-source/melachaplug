@@ -203,6 +203,15 @@ globals:
     type: std::string
     restore_value: no
     initial_value: to_string(${latitude}) + "," + to_string(${longitude})
+
+  - id: random_time_1
+    type: long int
+    restore_value: no
+    initial_value: "0"
+  - id: random_time_2
+    type: long int
+    restore_value: no
+    initial_value: "0"
     
 binary_sensor:
   - platform: gpio
@@ -223,7 +232,7 @@ switch:
     name: ${friendly_name} Relay 1
     id: relay_1
     pin: ${relay_1_gpio}
-    restore_mode: "ALWAYS_OFF"  # defaults to off in case of reset on Shabbos or Yom Tov
+    restore_mode: "ALWAYS_ON"  # defaults to on since only goes off for one minute each Shabbos
     on_turn_on:
       then:
         - switch.turn_on: built_in_led
@@ -255,14 +264,12 @@ switch:
     optimistic: true      # set to true for status to be updated immediately
     turn_on_action:
       then:
-        - switch.turn_off: relay_1           # turn off plug for Shabbos and Yom Tov
         - switch.turn_off: enable_1_switch   # disables button for Shabbos and Yom Tov
         - switch.turn_on: flash_led
     turn_off_action:
       then:
         - switch.turn_off: flash_led         # must be before relay
         - switch.turn_on: enable_1_switch    # re-enable button for weekdays
-        - switch.turn_on: relay_1            # turn on plug for weekday
 
   # LED flash preset
   - platform: template
@@ -334,3 +341,8 @@ select:
       - ""
     on_value:
       - lambda: 'MelachaPlug::onKeyboardSelect(x);'
+
+interval:
+  - interval: 1min
+    then:
+      - lambda: 'MelachaPlug::onInterval();'
