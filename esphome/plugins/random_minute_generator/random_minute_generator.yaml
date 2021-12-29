@@ -1,0 +1,64 @@
+esphome:
+  includes: 
+    - plugins/random_minute_generator/random_minute_generator.h
+  on_boot:
+    - priority: -100.0                   # pretty much everything should already be initialized
+      then:
+        - logger.log: "--- Waiting for hdate valid  ---"
+        - wait_until:
+            lambda: 'return id(hdate_valid);'
+        - logger.log: --------- hdate valid ---------"
+        - lambda: 'RandomMinute::onBoot();'
+
+sun:
+  on_sunset:
+    - elevation: ${deg_shabbos_start}° # degree to assume Shabbos or Yom Tov starts
+      then:
+        - lambda: 'RandomMinute::onShabbosStart();'
+
+globals:
+  - id: random_time_1
+    type: long int
+    restore_value: no
+    initial_value: "0"
+  - id: random_time_2
+    type: long int
+    restore_value: no
+    initial_value: "0"
+
+text_sensor:
+  - platform: template
+    name: ${friendly_name} Last Random Shut Off
+    internal: true
+    id: last_random
+    update_interval: never
+
+switch:
+  - platform: template
+    id: template_relay
+    disabled_by_default: true
+    optimistic: yes
+    turn_off_action:
+      - switch.turn_off: relay_1
+      - delay: 60s
+      - switch.turn_on: relay_1
+      - switch.turn_on: template_relay
+  - platform: template
+    name: ${friendly_name} turn off relay
+    disabled_by_default: true
+    optimistic: yes
+    turn_on_action:
+      - lambda: 'id(template_relay).turn_off();'
+      
+# -------------- testing ----------------
+  - platform: template
+    name: ${friendly_name} generateRandomMinute
+    disabled_by_default: true
+    optimistic: yes
+    turn_on_action:
+      - lambda: 'RandomMinute::generateRandomMinute();'
+
+interval:
+  - interval: 1min
+    then:
+      - lambda: 'RandomMinute::onInterval();'

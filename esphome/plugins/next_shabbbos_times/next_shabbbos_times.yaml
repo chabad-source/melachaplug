@@ -1,0 +1,29 @@
+esphome:
+  includes: 
+    - plugins/next_shabbbos_times/next_shabbbos_times.h
+
+external_components:
+  - source: github://pr#2933
+    components: [ sun ]
+  - source: github://pr#2955
+    components: [ time ]
+
+text_sensor:
+  - platform: template
+    name: ${friendly_name} Next Shabbos Mode On
+    internal: true
+    id: ts_next_shabbos_on
+    update_interval: never
+  - platform: template
+    name: ${friendly_name} Next Shabbos Mode Off
+    internal: true
+    id: ts_next_shabbos_off
+    update_interval: never
+
+switch:             
+  - platform: template
+    name: ${friendly_name} Get Next Shabbos 
+    disabled_by_default: true
+    optimistic: yes
+    turn_on_action:
+      - lambda: 'NextShabbosTimes::getNextShabbos();'

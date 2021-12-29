@@ -1,0 +1,111 @@
+esphome:
+  includes: 
+    - plugins/location_extras/location_extras.h
+  on_boot:
+    - priority: -100.0                   # pretty much everything should already be initialized
+      then:
+        - logger.log: "--- Waiting for hdate valid  ---"
+        - wait_until:
+            lambda: 'return id(hdate_valid);'
+        - logger.log: --------- hdate valid ---------"
+        - lambda: 'LocationExtras::onBoot();'
+# frequency of data flushed to the flash
+preferences:
+  flash_write_interval: 1min
+
+# Enable HTTP Requests (for auto location API)
+http_request:
+  useragent: esphome/device
+  timeout: 10s
+
+globals:
+  - id: lat_global
+    type: float
+    restore_value: yes
+    initial_value: ${latitude}
+  - id: lon_global
+    type: float
+    restore_value: yes
+    initial_value: ${longitude}
+  - id: lat_and_lon_global
+    type: std::string
+    restore_value: no
+    initial_value: to_string(${latitude}) + "," + to_string(${longitude})
+
+switch:
+  # update auto detect location
+  - platform: template
+    name: ${friendly_name} Auto Detect Location
+    disabled_by_default: true
+    optimistic: yes
+    turn_on_action:
+      - lambda: 'LocationExtras::autoSetLocation();'
+    turn_off_action:
+      - text_sensor.template.publish:
+          id: lat_text_sensor
+          state: "0.0"
+      - text_sensor.template.publish:
+          id: lon_text_sensor
+          state: "0.0"
+      - text_sensor.template.publish:
+          id: auto_location_found
+          state: "Wait 60 seconds then reboot for changes to take effect"
+
+text_sensor:
+  # text sensor to display the location 
+  - platform: template
+    name: ${friendly_name} Auto Location Found
+    internal: true
+    id: auto_location_found
+    update_interval: never
+    
+  - platform: template
+    name: ${friendly_name} Latitude
+    id: lat_text_sensor
+    update_interval: never
+    on_value:
+      then:
+        lambda: 'LocationExtras::onLatitudeSet(x);'
+  - platform: template
+    name: ${friendly_name} Longitude
+    id: lon_text_sensor
+    update_interval: never
+    on_value:
+      then:
+        lambda: 'LocationExtras::onLongitudeSet(x);'
+  - platform: template
+    name: ${friendly_name} Keyboard
+    internal: true
+    id: keyboard
+    update_interval: never
+
+# To update the lat & lon from the web UI we use a select component
+select:
+  - platform: template
+    name: "Keyboard Select"
+    internal: true
+    id: keyboard_select
+    update_interval: never
+    optimistic: true
+    initial_option: ""
+    options: 
+    - "Repeat last character"
+    - "1"
+    - "2"
+    - "3"
+    - "4"
+    - "5"
+    - "6"
+    - "7"
+    - "8"
+    - "9"
+    - "0"
+    - "-"
+    - "."
+    - "BACKSPACE"
+    - "CLEAR"
+    - "Save to Latitude"
+    - "Save to Longitude"
+    - ""
+    on_value:
+      - lambda: 'LocationExtras::onKeyboardSelect(x);'
