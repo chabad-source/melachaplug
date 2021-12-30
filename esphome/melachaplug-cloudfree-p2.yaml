@@ -2,7 +2,7 @@
 #------------ User Configuration ------------
 #--------------------------------------------
 substitutions:
-  device_name: "melachaplug-cloudfree-p2"      # access web UI using http://melachaplug-cloudfree-p2.local/ or it's IP
+  device_name: "melachaplug-cloudfree-p2"     # access web UI using "device_name".local/ or it's IP
   friendly_name: "Melacha Plug CloudFree P2"
   
   relay_1_gpio: "4"                  # Switch this section
@@ -10,14 +10,18 @@ substitutions:
   built_in_led_gpio: "2"
   led_inverted: "true"
   
-  deg_shabbos_start:  "4"            # check a bit early just in case (shkiah is at -0.833)
-  deg_shabbos_end:  "-8.5"           # time based off Alter Rebbe https://www.chabad.org/3209349
-  deg_tzeit: "-6"
+  restore_mode_relay:          "ALWAYS_OFF"  # relay state on startup
+  restore_mode_led:            "ALWAYS_OFF"  # led state on startup
+  restore_mode_button_switch:  "ALWAYS_OFF"  # switch which disables button state on startup
 
-  timezone: America/New_York         # check format https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  timezone: America/New_York         # check format en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
   latitude: "40.669010"              # change to your location (important for proper zmanim)
   longitude: "-73.942871"            # 770 Chabad Lubavitch World Headquarters
+  
+  deg_shabbos_start:  "4"            # check a bit early just in case (shkiah is at -0.833)
+  deg_shabbos_end:  "-8.5"           # time based off Alter Rebbe www.chabad.org/3209349
+  deg_tzeit: "-6"
 
 # Switch this section based on your chip
 esp8266:
@@ -27,13 +31,10 @@ esp8266:
 #   board: esp32doit-devkit-v1
 
 wifi:
-  ssid: !secret wifi_ssid2
-  password: !secret wifi_password2
-
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "${friendly_name} Fallback"
-    password: ""                  # password of fallback hotspot
+    password: ""                     # password of fallback hotspot
 
 #--------------------------------------------
 #------------- Advanced Section -------------
