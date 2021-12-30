@@ -26,7 +26,7 @@ The solution is here!
 
 ### What You'll Need
 -   A plug with ESPHome or Tasmota software installed.
--   Pre-flashed plugs can be bought from the [Athom](https://www.athom.tech/) or [Cloud Free](https://cloudfree.shop/) shop. There is also some sonoff s31 preflashed to be found on [Ebay](https://www.ebay.com/sch/i.html?_nkw=preflashed+smart+plug), and [Amazon](https://www.amazon.com/dp/B09D68P39F/).
+-   Pre-flashed plugs can be bought from the [Athom](https://www.athom.tech/) or [Cloud Free](https://cloudfree.shop/) shop. There is also some preflashed plugs to be found on [Ebay](https://www.ebay.com/sch/i.html?_nkw=preflashed+smart+plug), and [Amazon](https://www.amazon.com/dp/B09D68P39F/).
 
 ## Installation
 
