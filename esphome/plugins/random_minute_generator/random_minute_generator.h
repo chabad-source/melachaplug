@@ -7,6 +7,7 @@ using namespace esphome;
 using namespace time;
 
 namespace RandomMinute  {
+
     void generateRandomMinute() {
         // runs on every shabbos start time (and on boot)
         time_t timestamp_start = id(sntp_time).timestamp_now();
@@ -37,8 +38,8 @@ namespace RandomMinute  {
         id(template_relay).turn_off();
     }
 
-    // -------------------------------------------------------------------------------------
 
+    // -------------------------------------------------------------------------------------
     void onBoot() {
         // in case of reboot on Shabbos or Yom Tov
         if (isassurbemelachah(Hdate::current_hdate) == true) {
@@ -47,7 +48,6 @@ namespace RandomMinute  {
     }
 
     void onInterval() {
-        ESP_LOGD("RandomMinute::onInterval", "ran--------------------------");
         if (id(hdate_valid) && id(shabbos_mode).state == true) {
             time_t timestamp_current = id(sntp_time).timestamp_now();
             timestamp_current -= timestamp_current % 60;  // rounds down minute to 0 seconds
