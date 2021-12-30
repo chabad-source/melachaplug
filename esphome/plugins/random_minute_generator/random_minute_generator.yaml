@@ -49,14 +49,6 @@ switch:
     optimistic: yes
     turn_on_action:
       - lambda: 'id(template_relay).turn_off();'
-      
-# -------------- testing ----------------
-  - platform: template
-    name: ${friendly_name} generateRandomMinute
-    disabled_by_default: true
-    optimistic: yes
-    turn_on_action:
-      - lambda: 'RandomMinute::generateRandomMinute();'
 
 interval:
   - interval: 1min
