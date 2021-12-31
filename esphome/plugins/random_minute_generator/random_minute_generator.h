@@ -66,6 +66,7 @@ namespace RandomMinute  {
     }
 
     void onShabbosStart() {
+        ESP_LOGD("RandomMinute::onShabbosStart", "ran");
         if (isassurbemelachah(Hdate::current_hdate) == true) {
             // runs whether it's the first day or not
             ESP_LOGD("RandomMinute::onShabbosStart", "Generating random minute");
