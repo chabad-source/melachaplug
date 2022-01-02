@@ -41,6 +41,7 @@ namespace RandomMinute  {
 
     // -------------------------------------------------------------------------------------
     void onBoot() {
+        ESP_LOGD("RandomMinute::onBoot", "testing-------------");
         // in case of reboot on Shabbos or Yom Tov
         if (isassurbemelachah(Hdate::current_hdate) == true) {
             RandomMinute::generateRandomMinute();
