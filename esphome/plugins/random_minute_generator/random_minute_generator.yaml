@@ -53,4 +53,5 @@ switch:
 interval:
   - interval: 1min
     then:
+      - logger.log: "--- RandomMinute On interval ran  ---"
       - lambda: 'RandomMinute::onInterval();'
