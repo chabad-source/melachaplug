@@ -73,7 +73,7 @@ namespace RandomMinute  {
             RandomMinute::generateRandomMinute();
         }
     }
-    void test() {
+    void testing() {
         ESP_LOGD("RandomMinute::test", "ran------------------------");
     }
 } // namespace RandomMinute
