@@ -14,6 +14,7 @@ sun:
   on_sunset:
     - elevation: ${deg_shabbos_start}° # degree to assume Shabbos or Yom Tov starts
       then:
+        - logger.log: "--- RandomMinute on sunset  ---"
         - lambda: 'RandomMinute::onShabbosStart();'
 
 globals:
