@@ -16,6 +16,7 @@ sun:
       then:
         - logger.log: "--- RandomMinute on sunset  ---"
         - lambda: 'RandomMinute::onShabbosStart();'
+        - lambda: 'RandomMinute::test();'
 
 globals:
   - id: random_time_1
