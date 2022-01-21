@@ -58,7 +58,7 @@ Shabbos from this project can be reused to be helpful in all types of projects.
 -   Those with motion based lights, can have the motion disabled on Shabbos and Yom Tov.
 -   Preserve energy usage during Shabbos and Yom Tov, for example of water heaters.
 -   Turn off security cameras.
--   Disbale occidental light switch triggers (advanced).
+-   Disable accidental light switch triggers (advanced).
 
 
 ## Contribute 
