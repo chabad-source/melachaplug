@@ -40,6 +40,9 @@ The solution is here!
 -   Download the melachaplug.bin file from above.
 -   If your device is using Tasmota, follow instructions on how to upgrade from the [ESPHome docs](https://esphome.io/guides/migrate_sonoff_tasmota.html) or [Tasmota docs](https://tasmota.github.io/docs/Upgrading/#upgrade-using-webui).
 -   If your device is using ESPHome, use the web UI to install the firmware.
+-   Once the firmware is installed it will create a WiFi access point called "Melacha Plug Fallback", connect to it using any phone or computer.
+-   On the devices webpage enter in your WiFi details (it should pop up, if it doesn't then it can be accessed via it's IP).
+-   The device will restart, and should appear on your WiFi network.
 
 ### Custom Configuration
 -   Set up your own ESPhome instance. If you have [Home Assistant](https://www.home-assistant.io/) then use the [ESPHome Dashboard](https://esphome.io/guides/getting_started_hassio.html), otherwise follow the [Command Line Interface](https://esphome.io/guides/getting_started_command_line.html) guide.
