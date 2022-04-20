@@ -33,8 +33,8 @@ The solution is here!
 ### Pre-configured
 
 *Limitations*
--   Timezone won't be set to your specific location.
--   Your location won't be 100% accurate (you can update it in web UI to be your exact location). 
+-   Timezone is locked to EST unless you flash it yourself.
+-   Your location won't be 100% accurate (you can update it via the web UI). 
 
 *Instructions*
 -   Download the melachaplug.bin file from above.
