@@ -42,14 +42,14 @@ The solution is here!
 -   If your device is using ESPHome, use the web UI to install the firmware.
 
 ### Custom Configuration
--   Set up your own ESPhome instance. If you have [Home Assistant](https://www.home-assistant.io/) then use the [ESPHome Dashboard](https://esphome.io/guides/getting_started_hassio.html), otherwise use their [Command Line Interface](https://esphome.io/guides/getting_started_command_line.html) guide.
+-   Set up your own ESPhome instance. If you have [Home Assistant](https://www.home-assistant.io/) then use the [ESPHome Dashboard](https://esphome.io/guides/getting_started_hassio.html), otherwise follow the [Command Line Interface](https://esphome.io/guides/getting_started_command_line.html) guide.
 -   Find the YAML file for your device from the esphome folder above.
 -   Configure the YAML settings to your liking, and flash device (more details on the ESPHome site).
 
 ## Advanced
 
 ### Using Relays
-You can customize this project for any sort of relays, includung the sonoff basic. 
+You can customize this project for any sort of relays, including the sonoff basic. 
 
 ### Shabbos Mode
 Shabbos from this project can be reused to be helpful in all types of projects.
