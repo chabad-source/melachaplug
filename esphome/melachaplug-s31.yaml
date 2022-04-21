@@ -39,4 +39,109 @@ wifi:
 #--------------------------------------------
 #------------- Advanced Section -------------
 #--------------------------------------------
-#... add from melachaplug.yaml
+esphome:
+  name: ${device_name}
+  # name_add_mac_suffix: true
+  project:
+    name: chabad-source.melachaplug
+    version: "2021.12.29.0"
+
+packages:
+  remote_package:
+    url: https://github.com/chabad-source/melachaplug/
+    ref: main # optional
+    files: 
+      - esphome/plugins/melachaplug_core/melachaplug_core.yaml
+      - esphome/plugins/melachaplug_basics/melachaplug_basics.yaml
+      - esphome/plugins/location_extras/location_extras.yaml
+      - esphome/plugins/next_shabbbos_times/next_shabbbos_times.yaml
+    refresh: 1d # optional
+
+# Sensors  
+sensor:
+  - platform: sun
+    name: ${friendly_name} Sun Elevation
+    type: elevation
+    internal: true
+
+binary_sensor:
+  - platform: gpio
+    name: ${friendly_name} Button 1
+    id: button_1
+    pin:
+      number: ${button_1_gpio}
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on: 10ms
+    on_click:
+      then:
+        - switch.toggle: relay_1
+
+switch:
+  # Shabbos mode switch - here is where we set what happens when it turns on and off
+  - platform: template
+    name: ${friendly_name} Shabbos Mode
+    id: shabbos_mode
+    optimistic: true      # set to true for status to be updated immediately
+    turn_on_action:
+      then:
+        - switch.turn_off: relay_1           # turn off plug for Shabbos and Yom Tov
+        - switch.turn_off: enable_button_1   # disables button for Shabbos and Yom Tov
+        - switch.turn_on: flash_led
+    turn_off_action:
+      then:
+        - switch.turn_off: flash_led         # must be before relay
+        - switch.turn_on: enable_button_1    # re-enable button for weekdays
+        - switch.turn_on: relay_1            # turn on plug for weekday
+
+  - platform: gpio
+    name: ${friendly_name} Relay 1
+    id: relay_1
+    pin: ${relay_1_gpio}
+    restore_mode: ${restore_mode_relay}  # defaults to on
+    on_turn_on:
+      then:
+        - switch.turn_on: built_in_led
+    on_turn_off:
+      then:
+        - switch.turn_off: built_in_led
+
+  - platform: gpio
+    name: ${friendly_name} Built-in LED
+    disabled_by_default: true
+    id: built_in_led
+    pin: ${built_in_led_gpio}
+    restore_mode: ${restore_mode_led} # defaults to the same as the relay
+    inverted: ${led_inverted}
+
+  # switch which can disable the button
+  - platform: gpio
+    name: ${friendly_name} Enable Button 1
+    internal: true
+    id: enable_button_1
+    pin: ${button_1_gpio}
+    inverted: false
+    restore_mode: ${restore_mode_button_switch} # defaults to off in case of reset on Shabbos or Yom Tov
+
+  # LED flash preset
+  - platform: template
+    name: ${friendly_name} Flash LED
+    disabled_by_default: true
+    optimistic: yes
+    id: flash_led
+    turn_on_action:
+    - while:
+        condition:
+          lambda: 'return true;'
+        then:
+        - switch.turn_on: built_in_led
+        - delay: 75ms
+        - switch.turn_off: built_in_led
+        - delay: 75ms
+        - switch.turn_on: built_in_led
+        - delay: 75ms
+        - switch.turn_off: built_in_led
+        - delay: 2875ms
+    turn_off_action:
+    - switch.turn_off: built_in_led
