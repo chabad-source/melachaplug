@@ -1,3 +1,0 @@
-esphome:
-  includes: 
-    - plugins/hdate/hdate.h

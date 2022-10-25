@@ -2,13 +2,13 @@
 #------------ User Configuration ------------
 #--------------------------------------------
 substitutions:
-  device_name: "melachaplug-cloudfree-p2"     # access web UI using "device_name".local/ or it's IP
-  friendly_name: "Melacha Plug CloudFree P2"
+  device_name: "melachaplug"         # access web UI using "device_name".local/ or it's IP
+  friendly_name: "Melacha Plug"
   
-  relay_1_gpio: "4"                  # Switch this section
-  button_1_gpio:  "13"               # based on your chip
+  relay_1_gpio: "13"                 # Switch this section
+  button_1_gpio:  "4"                # based on your chip
   built_in_led_gpio: "2"
-  led_inverted: "true"
+  led_inverted: "false"
 
   restore_mode_relay:          "ALWAYS_OFF"  # relay state on startup
   restore_mode_led:            "ALWAYS_OFF"  # led state on startup
@@ -24,11 +24,11 @@ substitutions:
   deg_tzeit: "-6"
 
 # Switch this section based on your chip
-esp8266:
-  board: esp01_1m
-  restore_from_flash: true
-# esp32:
-#   board: esp32doit-devkit-v1
+# esp8266:
+#   board: nodemcuv2
+#   restore_from_flash: true
+esp32:
+  board: esp32doit-devkit-v1
 
 wifi:
   ssid: !secret wifi_ssid5

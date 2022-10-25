@@ -16,4 +16,4 @@ web_server:
 
 button:
   - platform: restart
-    name: ${friendly_name} Restart
+    name: ${friendly_name} 20 Restart

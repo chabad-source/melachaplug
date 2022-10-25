@@ -1,10 +1,10 @@
-esphome:
-  includes:
-    - plugins/melachaplug_core/melachaplug_core.h
-  on_boot:
-    - priority: 800                      # This is where all hardware initialization of vital components is executed
-      then:
-        - switch.turn_on: shabbos_mode
+# esphome:
+#   includes:
+#     - plugins/melachaplug_core/melachaplug_core.h
+#   on_boot:
+#     - priority: 800                      # This is where all hardware initialization of vital components is executed
+#       then:
+#         - switch.turn_on: shabbos_mode
 
 time:
   - platform: sntp
@@ -31,13 +31,13 @@ sun:
 
 text_sensor:
   - platform: template
-    name: ${friendly_name} Hebrew Date
+    name: ${friendly_name} 08 Hebrew Date
     internal: true
     id: hebrew_date
     update_interval: never
 
   - platform: sun
-    name: ${friendly_name} Early Shabbos and Yom Tov Start (elevated ${deg_shabbos_start}°)
+    name: ${friendly_name} 09 Early Shabbos and Yom Tov Start (elevated ${deg_shabbos_start}°)
     internal: true
     id: ts_shabbos_start
     type: sunset
@@ -45,14 +45,14 @@ text_sensor:
     update_interval: never
     elevation: ${deg_shabbos_start}°
   - platform: sun
-    name: ${friendly_name} Next Sunset (elevated -0.833° - default)
+    name: ${friendly_name} 10 Next Sunset (elevated -0.833° - default)
     internal: true
     id: ts_sunset
     type: sunset
     format: "%l:%M:%S %p, %A"
     update_interval: never
   - platform: sun
-    name: ${friendly_name} Tzeit Hakochavim - Nightfall (elevated ${deg_tzeit}°)
+    name: ${friendly_name} 11 Tzeit Hakochavim - Nightfall (elevated ${deg_tzeit}°)
     internal: true
     id: ts_tzeit
     type: sunset
@@ -60,7 +60,7 @@ text_sensor:
     update_interval: never
     elevation: ${deg_tzeit}°
   - platform: sun
-    name: ${friendly_name} Shabbos and Yom Tov Ends (elevated ${deg_shabbos_end}°)
+    name: ${friendly_name} 12 Shabbos and Yom Tov Ends (elevated ${deg_shabbos_end}°)
     internal: true
     id: ts_shabbos_end
     type: sunset
