@@ -57,7 +57,7 @@ button:
     on_press:
       - lambda: 'LocationExtras::autoSetLocation();'
   - platform: template
-    name: ${friendly_name} 07 Revert To Defualt Location
+    name: ${friendly_name} 07 Revert To Default Location
     on_press:
       - lambda: 'LocationExtras::revertToDefaultLocation();'
 
