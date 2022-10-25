@@ -49,4 +49,4 @@ packages:
       - esphome/plugins/melachaplug_core/melachaplug_core.yaml            # Required
       - esphome/plugins/melachaplug_basics/melachaplug_basics.yaml        # Required
       - esphome/plugins/location_extras/location_extras.yaml              # Required
-    refresh: 1d                                                             # Optional
+    refresh: 1d                                                           # Optional
