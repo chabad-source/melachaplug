@@ -59,7 +59,7 @@ Shabbos from this project can be reused to be helpful in all types of projects.
 
 ### Potential Use Cases
 -   Those with motion based lights, can have the motion disabled on Shabbos and Yom Tov.
--   Preserve energy usage during Shabbos and Yom Tov, for example of water heaters.
+-   Preserve energy usage during Shabbos and Yom Tov, for example of water heaters (temperature should be kept above °120F to prevent [Legionnaires’ disease](https://www.cdc.gov/legionella/wmp/control-toolkit/potable-water-systems.html)).
 -   Turn off security cameras.
 -   Disable accidental light switch triggers on Shabbos and Yom Tov (advanced).
 
