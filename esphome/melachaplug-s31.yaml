@@ -34,19 +34,23 @@ wifi:
   ssid: !secret wifi_ssid5
   password: !secret wifi_password5
 
+esphome:
+  includes:
+    - header-files/melachaplug_main.h
+
 packages:
   # Local Packages saved in plugins folder
-  # melachaplug_main: !include plugins/melachaplug_main/melachaplug_main.yaml         # Required
-  # melachaplug_core: !include plugins/melachaplug_core/melachaplug_core.yaml         # Required
-  # melachaplug_basics: !include plugins/melachaplug_basics/melachaplug_basics.yaml   # Required
-  # location_extras: !include plugins/location_extras/location_extras.yaml            # Required
+  # melacha_config:      !include plugins/melachaplug/melacha_config.yaml     # Required
+  # plug_info:           !include plugins/melachaplug/plug_info.yaml          # Required
+  # location_info:       !include plugins/melachaplug/location_info.yaml      # Required
+  # optional_config:     !include plugins/melachaplug/optional_config.yaml    # Optional
 
   remote_package:
     url: https://github.com/chabad-source/melachaplug/
-    ref: main # optional
+    ref: main                                                               # optional
     files: 
-      - esphome/plugins/melachaplug_main/melachaplug_main.yaml            # Required
-      - esphome/plugins/melachaplug_core/melachaplug_core.yaml            # Required
-      - esphome/plugins/melachaplug_basics/melachaplug_basics.yaml        # Required
-      - esphome/plugins/location_extras/location_extras.yaml              # Required
-    refresh: 1d                                                           # Optional
+      - esphome/plugins/melachaplug/melacha_config.yaml                     # Required
+      - esphome/plugins/melachaplug/plug_info.yaml                          # Required
+      - esphome/plugins/melachaplug/location_info.yaml                      # Required
+      - esphome/plugins/melachaplug/optional_config.yaml                    # Optional
+    refresh: 1d                                                             # Optional

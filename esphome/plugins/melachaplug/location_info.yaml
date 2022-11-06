@@ -1,6 +1,7 @@
+#--------------------------------------------
+#-------------- Location Info ---------------
+#--------------------------------------------
 esphome:
-  # includes: 
-  #   - plugins/location_extras/location_extras.h
   on_boot:
     - priority: -100.0                   # pretty much everything should already be initialized
       then:
@@ -27,48 +28,8 @@ globals:
     type: float
     restore_value: yes
     initial_value: ${longitude}
-  # - id: lat_and_lon_global
-  #   type: std::string
-  #   restore_value: no
-  #   initial_value: to_string(${latitude}) + "," + to_string(${longitude})
-
-# switch:
-#   # update auto detect location
-#   - platform: template
-#     name: ${friendly_name} Auto Detect Location
-#     disabled_by_default: true
-#     optimistic: yes
-#     turn_on_action:
-#       - lambda: 'LocationExtras::autoSetLocation();'
-#     turn_off_action:
-#       - text_sensor.template.publish:
-#           id: lat_text_sensor
-#           state: "0.0"
-#       - text_sensor.template.publish:
-#           id: lon_text_sensor
-#           state: "0.0"
-#       - text_sensor.template.publish:
-#           id: auto_location_found
-#           state: "Wait 2 minutes then reboot for changes to take effect"
-
-button:
-  - platform: template
-    name: ${friendly_name} 05 Auto Detect Location
-    on_press:
-      - lambda: 'LocationExtras::autoSetLocation();'
-  - platform: template
-    name: ${friendly_name} 07 Revert To Default Location
-    on_press:
-      - lambda: 'LocationExtras::revertToDefaultLocation();'
 
 text_sensor:
-  # text sensor to display the location 
-  - platform: template
-    name: ${friendly_name} 06 Auto Location Found
-    internal: true
-    id: auto_location_found
-    update_interval: never
-    
   - platform: template
     name: ${friendly_name} 01 Latitude
     id: lat_text_sensor
@@ -83,6 +44,12 @@ text_sensor:
     on_value:
       then:
         lambda: 'LocationExtras::onLongitudeSet(x);'
+  # text sensor to display the location 
+  - platform: template
+    name: ${friendly_name} 06 Auto Location Found
+    internal: true
+    id: auto_location_found
+    update_interval: never
 
 number:
   - platform: template
@@ -107,4 +74,13 @@ number:
     lambda: 'return atof(id(lon_text_sensor).state.c_str());'
     set_action:
       - lambda: 'id(lon_text_sensor).publish_state(to_string(x));'
-      
+
+button:
+  - platform: template
+    name: ${friendly_name} 05 Auto Detect Location
+    on_press:
+      - lambda: 'LocationExtras::autoSetLocation();'
+  - platform: template
+    name: ${friendly_name} 07 Revert To Default Location
+    on_press:
+      - lambda: 'LocationExtras::revertToDefaultLocation();'

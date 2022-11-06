@@ -1,18 +1,13 @@
-captive_portal:
+#--------------------------------------------
+#------------- Optional Config --------------
+#--------------------------------------------
 
+# Enable logger for debugging 
 logger:
 
 # Enable Home Assistant API
 api:
   reboot_timeout: 0s              # no need to connect to HA so no reboot necessary
-
-# Enable Over The Air updates
-ota:
-
-# Enable Web Interface
-web_server:
-  port: 80
-  include_internal: true
 
 button:
   - platform: restart

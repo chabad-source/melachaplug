@@ -1,0 +1,127 @@
+#--------------------------------------------
+#-------------- Melacha Config --------------
+#--------------------------------------------
+esphome:
+  name: ${device_name}
+  # name_add_mac_suffix: true
+  project:
+    name: chabad-source.melachaplug
+    version: "2022.11.5.0"
+  on_boot:
+    - priority: 800                      # This is where all hardware initialization of vital components is executed
+      then:
+        - switch.turn_on: shabbos_mode
+
+# Enable Over The Air updates
+ota:
+
+# Enable fallback hotspot
+captive_portal:
+
+wifi:
+  # Configure fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "${friendly_name} Fallback"
+    password: ""                  # password of fallback hotspot
+
+# Enable Web Interface
+web_server:
+  port: 80
+  include_internal: true
+
+time:
+  - platform: sntp
+    id: sntp_time
+    timezone: ${timezone}
+    update_interval: 60min
+    on_time_sync:
+      then:
+        - lambda: 'MelachaPlug::onTimeSync();'
+
+sun:
+  id: mysun
+  latitude: ${latitude}
+  longitude: ${longitude}
+  on_sunset:
+    - elevation: ${deg_shabbos_start}° # degree to assume Shabbos or Yom Tov starts
+      then:
+        - lambda: 'MelachaPlug::onTimeSync();'
+    - elevation: ${deg_shabbos_end}° # degree that Shabbos or Yom Tov Ends
+      then:
+        - lambda: 'MelachaPlug::onTimeSync();'
+
+# variables publicly (internally) available
+globals:
+  - id: deg_shabbos_start_global
+    type: float
+    restore_value: no
+    initial_value: ${deg_shabbos_start}
+  - id: deg_shabbos_end_global
+    type: float
+    restore_value: no
+    initial_value: ${deg_shabbos_end}
+  - id: hdate_valid
+    type: bool
+    restore_value: no
+    initial_value: "false"
+
+text_sensor:
+  - platform: template
+    name: ${friendly_name} 08 Hebrew Date
+    internal: true
+    id: hebrew_date
+    update_interval: never
+  - platform: sun
+    name: ${friendly_name} 09 Early Shabbos and Yom Tov Start (elevated ${deg_shabbos_start}°)
+    internal: true
+    id: ts_shabbos_start
+    type: sunset
+    format: "%l:%M:%S %p, %A"
+    update_interval: never
+    elevation: ${deg_shabbos_start}°
+  - platform: sun
+    name: ${friendly_name} 10 Next Sunset (elevated -0.833° - default)
+    internal: true
+    id: ts_sunset
+    type: sunset
+    format: "%l:%M:%S %p, %A"
+    update_interval: never
+  - platform: sun
+    name: ${friendly_name} 11 Tzeit Hakochavim - Nightfall (elevated ${deg_tzeit}°)
+    internal: true
+    id: ts_tzeit
+    type: sunset
+    format: "%l:%M:%S %p, %A"
+    update_interval: never
+    elevation: ${deg_tzeit}°
+  - platform: sun
+    name: ${friendly_name} 12 Shabbos and Yom Tov Ends (elevated ${deg_shabbos_end}°)
+    internal: true
+    id: ts_shabbos_end
+    type: sunset
+    format: "%l:%M:%S %p, %A"
+    update_interval: never
+    elevation: ${deg_shabbos_end}°
+
+sensor:
+  - platform: sun
+    name: ${friendly_name} 13 Sun Elevation
+    type: elevation
+    internal: true
+
+switch:
+  # Shabbos mode switch - here is where we set what happens when it turns on and off
+  - platform: template
+    name: ${friendly_name} 14 Shabbos Mode
+    id: shabbos_mode
+    optimistic: true      # set to true for status to be updated immediately
+    turn_on_action:
+      then:
+        - switch.turn_off: relay_1           # turn off plug for Shabbos and Yom Tov
+        - switch.turn_off: enable_button_1   # disables button for Shabbos and Yom Tov
+        - switch.turn_on: flash_led
+    turn_off_action:
+      then:
+        - switch.turn_off: flash_led         # must be before relay
+        - switch.turn_on: enable_button_1    # re-enable button for weekdays
+        - switch.turn_on: relay_1            # turn on plug for weekday
