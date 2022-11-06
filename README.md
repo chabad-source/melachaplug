@@ -5,12 +5,12 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=Q9A7HG8NQEJRU)
 
 # Melacha Plug
-A [Melacha](https://www.chabad.org/95906/) aware plug which knows when it's [Shabbos](https://www.chabad.org/633659/) or [Yom Tov](https://www.chabad.org/708510/).
+A [Melacha](https://www.chabad.org/95906/) aware plug which knows when it's [Shabbos](https://www.chabad.org/633659/) or [Yom Tov](https://www.chabad.org/holidays/default_cdo/jewish/holidays.htm).
 
 This project is using [ESPHome](https://esphome.io/).
 
 Looking to disable a smart doorbell for Shabbos?
-Worried about Google or Alexa listening to you on Shabbos or Yom Tov?
+Worried about Google or Alexa accidentally triggering on Shabbos or Yom Tov?
 The solution is here!
 
 ## Features
