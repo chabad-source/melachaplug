@@ -62,6 +62,7 @@ Shabbos from this project can be reused to be helpful in all types of projects.
 -   Preserve energy usage during Shabbos and Yom Tov, for example of water heaters (temperature should be kept above °120F to prevent [Legionnaires’ disease](https://www.cdc.gov/legionella/wmp/control-toolkit/potable-water-systems.html)).
 -   Turn off security cameras.
 -   Disable accidental light switch triggers on Shabbos and Yom Tov (advanced).
+-   Turn on a hot water urn before Shabbos and have it auto turn off after.
 
 
 ## Contribute 
