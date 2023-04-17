@@ -63,6 +63,7 @@ Shabbos from this project can be reused to be helpful in all types of projects.
 -   Turn off security cameras.
 -   Disable accidental light switch triggers on Shabbos and Yom Tov (advanced).
 -   Turn on a hot water urn before Shabbos and have it auto turn off after.
+-   Disable a dishwasher so it won't accidentally get turned on.
 
 
 ## Contribute 
