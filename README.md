@@ -14,13 +14,13 @@ Worried about Google or Alexa accidentally triggering on Shabbos or Yom Tov?
 The solution is here!
 
 ## Features
--   [x] Smart: A full Jewish Calendar onboard, it knows when Yom Tov is. 
--   [x] Failsafe: Buttons will be disabled on Shabbos. 
--   [x] Intelligent: Auto detects your location with the option to customize. 
--   [x] Aware: LED flash lets you know when Shabbos mode is enabled.
--   [x] Local: All logic is done on-board.
--   [x] Adaptable: All code is open source, tweak, correct and expand.
--   [x] Easy: Simply plug and play, your all set!
+-   [x] Smart: It features a full Jewish calendar on board, not just for Shabbos, but also for Yom Tov!
+-   [x] Failsafe: Buttons are disabled on Shabbos and Yom Tov for added security.
+-   [x] Intelligent: It automatically detects your location and provides the option to further customize.
+-   [x] Aware: A LED flash lets you know when Shabbos mode is enabled.
+-   [x] Local: All logic is processed on board.
+-   [x] Adaptable: All code is open source, allowing for easy tweaking, correction, and expansion.
+-   [x] Easy: Simply plug and play, and you're all set!
 
 ## Getting Started
 
