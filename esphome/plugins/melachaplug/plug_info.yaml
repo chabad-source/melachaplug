@@ -3,10 +3,10 @@
 #--------------------------------------------
 switch:
   - platform: gpio
-    name: ${friendly_name} 15 Relay 1
+    name: 20 Relay 1
     id: relay_1
     pin: ${relay_1_gpio}
-    restore_mode: ${restore_mode_relay}  # defaults to on
+    restore_mode: ${relay_restore_mode}  # defaults to on
     on_turn_on:
       then:
         - switch.turn_on: built_in_led
@@ -16,23 +16,24 @@ switch:
 
   # switch which can disable the button
   - platform: gpio
-    name: ${friendly_name} 16 Enable Button 1
-    internal: true
+    name: 21 Enable Button 1
     id: enable_button_1
     pin: ${button_1_gpio}
+    internal: true
     inverted: false
-    restore_mode: ${restore_mode_button_switch} # defaults to off in case of reset on Shabbos or Yom Tov
+    restore_mode: ALWAYS_OFF         # defaults to off in case of reset on Shabbos or Yom Tov
 
   # LED flash preset
   - platform: template
-    name: ${friendly_name} 17 Flash LED
+    name: 22 Flash LED
+    id: flash_led
     disabled_by_default: true
     optimistic: yes
-    id: flash_led
-    turn_on_action:
+    restore_state: no
+    on_turn_on:
     - while:
         condition:
-          lambda: 'return true;'
+          switch.is_on: flash_led
         then:
         - switch.turn_on: built_in_led
         - delay: 75ms
@@ -42,20 +43,19 @@ switch:
         - delay: 75ms
         - switch.turn_off: built_in_led
         - delay: 2875ms
-    turn_off_action:
+    on_turn_off:
     - switch.turn_off: built_in_led
 
   - platform: gpio
-    name: ${friendly_name} 18 Built-in LED
+    name: 23 Built-in LED
     disabled_by_default: true
     id: built_in_led
     pin: ${built_in_led_gpio}
-    restore_mode: ${restore_mode_led} # defaults to the same as the relay
+    restore_mode: ${relay_restore_mode}    # defaults to the same as the relay
     inverted: ${led_inverted}
 
 binary_sensor:
   - platform: gpio
-    name: ${friendly_name} 19 Button 1
     id: button_1
     pin:
       number: ${button_1_gpio}

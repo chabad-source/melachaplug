@@ -5,82 +5,57 @@ esphome:
   on_boot:
     - priority: -100.0                   # pretty much everything should already be initialized
       then:
-        - logger.log: "--- Waiting for hdate valid  ---"
+        - logger.log: "--- Waiting for hdate to be valid  ---"
         - wait_until:
             lambda: 'return id(hdate_valid);'
         - logger.log: --------- hdate valid ---------"
-        - lambda: 'LocationExtras::onBoot();'
-# frequency of data flushed to the flash
-preferences:
-  flash_write_interval: 2min
+        - lambda: 'LocationExtras::onBoot(${latitude}, ${longitude});'
 
 # Enable HTTP Requests (for auto location API)
 http_request:
   useragent: esphome/device
   timeout: 10s
 
-globals:
-  - id: lat_global
-    type: float
-    restore_value: yes
-    initial_value: ${latitude}
-  - id: lon_global
-    type: float
-    restore_value: yes
-    initial_value: ${longitude}
-
 text_sensor:
-  - platform: template
-    name: ${friendly_name} 01 Latitude
-    id: lat_text_sensor
-    update_interval: never
-    on_value:
-      then:
-        lambda: 'LocationExtras::onLatitudeSet(x);'
-  - platform: template
-    name: ${friendly_name} 02 Longitude
-    id: lon_text_sensor
-    update_interval: never
-    on_value:
-      then:
-        lambda: 'LocationExtras::onLongitudeSet(x);'
   # text sensor to display the location 
   - platform: template
-    name: ${friendly_name} 06 Auto Location Found
+    name: 12 Location Info
     internal: true
-    id: auto_location_found
+    id: location_info
     update_interval: never
 
 number:
   - platform: template
-    name: ${friendly_name} 03 Manually Set Latitude
+    name: 13 Set Latitude
     id: latitude_number
-    optimistic: false
+    optimistic: true
     min_value: -180.0000
     max_value: 180.0000
     step: .0001
     mode: box
-    lambda: 'return atof(id(lat_text_sensor).state.c_str());'
-    set_action:
-      - lambda: 'id(lat_text_sensor).publish_state(to_string(x));'
+    restore_value: true
+    initial_value: ${latitude}
+    on_value:
+      - lambda: 'LocationExtras::onLatitudeSet();'
   - platform: template
-    name: ${friendly_name} 04 Manually Set Longitude
+    name: 14 Set Longitude
     id: longitude_number
-    optimistic: false
+    optimistic: true
     min_value: -180.0000
     max_value: 180.0000
     step: .0001
     mode: box
-    lambda: 'return atof(id(lon_text_sensor).state.c_str());'
-    set_action:
-      - lambda: 'id(lon_text_sensor).publish_state(to_string(x));'
+    restore_value: true
+    initial_value: ${longitude}
+    on_value:
+      - lambda: 'LocationExtras::onLongitudeSet();'
 
 button:
   - platform: template
-    name: ${friendly_name} 05 Auto Detect Location
+    name: 15 Detect Location
     on_press:
-      - lambda: 'LocationExtras::autoSetLocation();'
+      - lambda: 'LocationExtras::detectLocation();'
   - platform: template
-    name: ${friendly_name} 07 Revert To Default Location
+    name: 16 Revert to Default Location
     on_press:
-      - lambda: 'LocationExtras::revertToDefaultLocation();'
+      - lambda: 'LocationExtras::revertToDefaultLocation(${latitude}, ${longitude});'

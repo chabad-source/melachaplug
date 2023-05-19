@@ -11,4 +11,4 @@ api:
 
 button:
   - platform: restart
-    name: ${friendly_name} 20 Restart
+    name: 26 Restart

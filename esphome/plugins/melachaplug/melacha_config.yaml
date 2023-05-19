@@ -3,14 +3,19 @@
 #--------------------------------------------
 esphome:
   name: ${device_name}
+  friendly_name: ${friendly_name}
   # name_add_mac_suffix: true
   project:
     name: chabad-source.melachaplug
-    version: "2022.11.5.0"
+    version: "2023.5.19.0"
   on_boot:
     - priority: 800                      # This is where all hardware initialization of vital components is executed
       then:
         - switch.turn_on: shabbos_mode
+
+# frequency of data flushed to the flash
+preferences:
+  flash_write_interval: 2min
 
 # Enable Over The Air updates
 ota:
@@ -36,92 +41,209 @@ time:
     update_interval: 60min
     on_time_sync:
       then:
-        - lambda: 'MelachaPlug::onTimeSync();'
+        - logger.log: --------- on_time_sync ---------"
+        - globals.set: 
+            id: time_valid
+            value: 'true'
+        - lambda: 'MelachaPlug::runMelachaChecks();'
+    on_time:
+      # Run every minute
+      - seconds: 0
+        minutes: /1
+        then:
+          - logger.log: --------- on_time ---------"
+          - lambda: 'MelachaPlug::runMelachaChecks();'
 
 sun:
   id: mysun
   latitude: ${latitude}
   longitude: ${longitude}
-  on_sunset:
-    - elevation: ${deg_shabbos_start}° # degree to assume Shabbos or Yom Tov starts
-      then:
-        - lambda: 'MelachaPlug::onTimeSync();'
-    - elevation: ${deg_shabbos_end}° # degree that Shabbos or Yom Tov Ends
-      then:
-        - lambda: 'MelachaPlug::onTimeSync();'
 
 # variables publicly (internally) available
 globals:
-  - id: deg_shabbos_start_global
-    type: float
-    restore_value: no
-    initial_value: ${deg_shabbos_start}
-  - id: deg_shabbos_end_global
-    type: float
-    restore_value: no
-    initial_value: ${deg_shabbos_end}
   - id: hdate_valid
     type: bool
     restore_value: no
     initial_value: "false"
-
-text_sensor:
-  - platform: template
-    name: ${friendly_name} 08 Hebrew Date
-    internal: true
-    id: hebrew_date
-    update_interval: never
-  - platform: sun
-    name: ${friendly_name} 09 Early Shabbos and Yom Tov Start (elevated ${deg_shabbos_start}°)
-    internal: true
-    id: ts_shabbos_start
-    type: sunset
-    format: "%l:%M:%S %p, %A"
-    update_interval: never
-    elevation: ${deg_shabbos_start}°
-  - platform: sun
-    name: ${friendly_name} 10 Next Sunset (elevated -0.833° - default)
-    internal: true
-    id: ts_sunset
-    type: sunset
-    format: "%l:%M:%S %p, %A"
-    update_interval: never
-  - platform: sun
-    name: ${friendly_name} 11 Tzeit Hakochavim - Nightfall (elevated ${deg_tzeit}°)
-    internal: true
-    id: ts_tzeit
-    type: sunset
-    format: "%l:%M:%S %p, %A"
-    update_interval: never
-    elevation: ${deg_tzeit}°
-  - platform: sun
-    name: ${friendly_name} 12 Shabbos and Yom Tov Ends (elevated ${deg_shabbos_end}°)
-    internal: true
-    id: ts_shabbos_end
-    type: sunset
-    format: "%l:%M:%S %p, %A"
-    update_interval: never
-    elevation: ${deg_shabbos_end}°
-
-sensor:
-  - platform: sun
-    name: ${friendly_name} 13 Sun Elevation
-    type: elevation
-    internal: true
+  - id: time_valid
+    type: bool
+    restore_value: no
+    initial_value: "false"
 
 switch:
+  - platform: template
+    name: 17 Eretz Yisrael
+    id: eretz_yisrael
+    optimistic: true      # set to true for status to be updated immediately
+    restore_mode: ${eretz_yisrael}
+    restore_state: true
+    on_turn_on:
+      then:
+        - logger.log: --------- on_turn_on eretz_yisrael ---------"
+        - lambda: 'MelachaPlug::runMelachaChecks();'
+    on_turn_off:
+      then:
+        - logger.log: --------- on_turn_off eretz_yisrael ---------"
+        - lambda: 'MelachaPlug::runMelachaChecks();'
+  - platform: template
+    name: 24 Early Shabbos
+    id: early_shabbos
+    optimistic: true      # set to true for status to be updated immediately
+    restore_mode: RESTORE_DEFAULT_OFF
+    restore_state: true
+    on_turn_on:
+      then:
+        - logger.log: --------- on_turn_on early_shabbos ---------"
+        - lambda: 'MelachaPlug::runMelachaChecks();'
+    on_turn_off:
+      then:
+        - logger.log: --------- on_turn_off early_shabbos ---------"
+        - lambda: 'MelachaPlug::runMelachaChecks();'
+  - platform: template
+    name: 18 Override Shabbos Mode 
+    id: override_shabbos_mode
+    optimistic: true      # set to true for status to be updated immediately
+    restore_mode: RESTORE_DEFAULT_OFF
+    restore_state: true
+  - platform: template
+    name: 25 Inverted Shabbos Mode 
+    id: inverted_shabbos_mode
+    optimistic: true      # set to true for status to be updated immediately
+    restore_mode: ${inverted_shabbos_mode}
+    restore_state: true
+    on_turn_on:
+      then:
+        - logger.log: --------- on_turn_on inverted_shabbos_mode ---------"
+        - lambda: 'MelachaPlug::runMelachaChecks();'
+    on_turn_off:
+      then:
+        - logger.log: --------- on_turn_off inverted_shabbos_mode ---------"
+        - lambda: 'MelachaPlug::runMelachaChecks();'
+
   # Shabbos mode switch - here is where we set what happens when it turns on and off
   - platform: template
-    name: ${friendly_name} 14 Shabbos Mode
+    name: 19 Shabbos Mode
     id: shabbos_mode
     optimistic: true      # set to true for status to be updated immediately
     turn_on_action:
       then:
-        - switch.turn_off: relay_1           # turn off plug for Shabbos and Yom Tov
+        - if:
+            condition:
+              switch.is_on: inverted_shabbos_mode
+              # lambda: 'return id(inverted_shabbos_mode).state == true;'
+            then:
+              - switch.turn_on: relay_1      # turn on plug for Shabbos and Yom Tov
+            else:
+              - switch.turn_off: relay_1     # turn off plug for Shabbos and Yom Tov
         - switch.turn_off: enable_button_1   # disables button for Shabbos and Yom Tov
         - switch.turn_on: flash_led
     turn_off_action:
       then:
         - switch.turn_off: flash_led         # must be before relay
         - switch.turn_on: enable_button_1    # re-enable button for weekdays
-        - switch.turn_on: relay_1            # turn on plug for weekday
+        - if:
+            condition:
+              switch.is_on: inverted_shabbos_mode
+              # lambda: 'return id(inverted_shabbos_mode).state == true;'
+            then:
+              - switch.turn_off: relay_1     # turn off plug for weekday
+            else:
+              - switch.turn_on: relay_1      # turn on plug for weekday
+
+text_sensor:
+  - platform: template
+    name: 01 Current Time
+    internal: true
+    lambda: 'return id(sntp_time).now().strftime("%a, %b %e, %Y, %l:%M %p");'
+    update_interval: 60s
+  - platform: template
+    name: 02 Hebrew Date
+    id: hebrew_date
+    internal: true        # Internal components will not be exposed to the frontend
+    update_interval: never
+  - platform: template
+    name: 03 Todays Melacha Check Time
+    id: todays_melacha_check_time 
+    internal: true        # Internal components will not be exposed to the frontend
+    update_interval: never
+  - platform: sun
+    name: 04 Next Sunset (elevated -0.833° - default)
+    internal: true
+    id: ts_sunset
+    type: sunset
+    format: "%a, %b %e, %l:%M %p"
+    update_interval: never
+  - platform: sun
+    name: 05 Tzeit Hakochavim - Nightfall (elevated ${deg_tzeit}°)
+    internal: true
+    id: ts_tzeit
+    type: sunset
+    format: "%a, %b %e, %l:%M %p"
+    update_interval: never
+    elevation: ${deg_tzeit}°
+
+number:
+  - platform: template
+    name: 06 Minute Offset Start
+    id: min_offset_start
+    optimistic: true
+    min_value: -300
+    max_value: 120
+    step: 0
+    mode: box
+    restore_value: true
+    initial_value: ${min_offset_start}
+    on_value:
+      - logger.log: --------- on min_offset_start ---------"
+      - lambda: 'MelachaPlug::runMelachaChecks();'
+  - platform: template
+    name: 07 Minute Offset End
+    id: min_offset_end
+    optimistic: true
+    min_value: -120
+    max_value: 120
+    step: 0
+    mode: box
+    restore_value: true
+    initial_value: ${min_offset_end}
+    on_value:
+      - logger.log: --------- on min_offset_end ---------"
+      - lambda: 'MelachaPlug::runMelachaChecks();'
+  - platform: template
+    name: 08 Degree Shabbos Starts
+    id: deg_shabbos_starts
+    optimistic: true
+    min_value: -5.000
+    max_value: 30.000 # this allows for early shabbosim
+    step: .001
+    mode: box
+    restore_value: true
+    initial_value: ${deg_shabbos_starts}
+    on_value:
+      - logger.log: --------- on deg_shabbos_starts ---------"
+      - lambda: 'MelachaPlug::runMelachaChecks();'
+  - platform: template
+    name: 09 Degree Shabbos Ends
+    id: deg_shabbos_ends
+    optimistic: true
+    min_value: -5.000
+    max_value: 30.000
+    step: .001
+    mode: box
+    restore_value: true
+    initial_value: ${deg_shabbos_ends}
+    on_value:
+      - logger.log: --------- on deg_shabbos_ends ---------"
+      - lambda: 'MelachaPlug::runMelachaChecks();'
+
+button:
+  - platform: template
+    name: 10 Set To Alter Rebbe Zmanim
+    on_press:
+      - lambda: 'MelachaPlug::setAlterRebbeZmanim();'
+
+sensor:
+  - platform: sun
+    name: 11 Sun Elevation
+    type: elevation
+    internal: true

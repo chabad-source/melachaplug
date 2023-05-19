@@ -1,27 +1,9 @@
 #-------------------------------------------- 
 #------------ User Configuration ------------
 #--------------------------------------------
-substitutions:
-  device_name: "melachaplug-s31"      # access web UI using "device_name".local/ or it's IP
-  friendly_name: "Melacha Plug S31"
-  
-  relay_1_gpio: "GPIO12"              # Switch this section
-  button_1_gpio:  "GPIO0"             # based on your chip
-  built_in_led_gpio: "GPIO13"
-  led_inverted: "true"
-
-  restore_mode_relay:          "ALWAYS_OFF"  # relay state on startup
-  restore_mode_led:            "ALWAYS_OFF"  # led state on startup
-  restore_mode_button_switch:  "ALWAYS_OFF"  # switch which disables button state on startup
-
-  timezone: America/New_York         # check format at en.wikipedia.org/wiki/List_of_tz_database_time_zones
-
-  latitude: "40.669010"              # change to your location (important for proper zmanim)
-  longitude: "-73.942871"            # 770 Chabad Lubavitch World Headquarters
-  
-  deg_shabbos_start:  "4"            # check a bit early just in case (shkiah is at -0.833)
-  deg_shabbos_end:  "-8.5"           # time based off Alter Rebbe www.chabad.org/3209349
-  deg_tzeit: "-6"
+wifi:
+  ssid:     !secret wifi_ssid5          # switch "!secret wifi_ssid5" to your wifi ssid
+  password: !secret wifi_password5      # switch "!secret wifi_password5" to your wifi password
 
 # Switch this section based on your chip
 esp8266:
@@ -30,9 +12,30 @@ esp8266:
 # esp32:
 #   board: esp32doit-devkit-v1
 
-wifi:
-  ssid: !secret wifi_ssid5
-  password: !secret wifi_password5
+substitutions:
+  device_name:   "melachaplug-s31"      # access web UI using "device_name".local/ or it's IP
+  friendly_name: "Melacha Plug S31"
+  
+  relay_1_gpio:       "GPIO12"          # Switch this section
+  button_1_gpio:      "GPIO0"           # based on your chip
+  built_in_led_gpio:  "GPIO13"
+  led_inverted:       "true"
+
+  relay_restore_mode:    "ALWAYS_OFF"              # relay and led state on startup, change to ALWAYS_ON,
+  inverted_shabbos_mode: "RESTORE_DEFAULT_OFF"     # to default relay on for Shabbos see esphome.io/components/switch/
+
+  timezone: America/New_York            # check format at en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  eretz_yisrael: "RESTORE_DEFAULT_OFF"  # switch to RESTORE_DEFAULT_ON if located in EY and do a one day Yom Tov
+
+  latitude:  "40.669000"                # change to your location (important for proper zmanim) default:  40.669000
+  longitude: "-73.942770"               # 770 Chabad Lubavitch World Headquarters                        -73.942770
+  
+  min_offset_start: "-30"               # offset in minutes (on Shabbos start options are: -300 - 120, on end: -120 - 120)
+  min_offset_end:   "0"                 # use negative number for an early offset (-30) and positive for a later offset
+
+  deg_shabbos_starts: "-0.833"          # shkiah is at -0.833
+  deg_shabbos_ends:   "-8.5"            # time based off Alter Rebbe www.chabad.org/3209349
+  deg_tzeit:          "-6"
 
 esphome:
   includes:
