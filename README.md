@@ -22,6 +22,8 @@ The solution is here!
 -   [x] Adaptable: All code is open source, allowing for easy tweaking, correction, and expansion.
 -   [x] Easy: Simply plug and play, and you're all set!
 
+![Web Server Screenshot](https://i.postimg.cc/ht7vKgj1/image.png)
+
 ## Getting Started
 
 ### What You'll Need
