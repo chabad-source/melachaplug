@@ -7,7 +7,7 @@ esphome:
   # name_add_mac_suffix: true
   project:
     name: chabad-source.melachaplug
-    version: "2023.5.19.0"
+    version: "2023.10.13.0"
   on_boot:
     - priority: 800                      # This is where all hardware initialization of vital components is executed
       then:
@@ -76,7 +76,6 @@ switch:
     id: eretz_yisrael
     optimistic: true      # set to true for status to be updated immediately
     restore_mode: ${eretz_yisrael}
-    restore_state: true
     on_turn_on:
       then:
         - logger.log: --------- on_turn_on eretz_yisrael ---------"
@@ -90,7 +89,6 @@ switch:
     id: early_shabbos
     optimistic: true      # set to true for status to be updated immediately
     restore_mode: RESTORE_DEFAULT_OFF
-    restore_state: true
     on_turn_on:
       then:
         - logger.log: --------- on_turn_on early_shabbos ---------"
@@ -104,13 +102,11 @@ switch:
     id: override_shabbos_mode
     optimistic: true      # set to true for status to be updated immediately
     restore_mode: RESTORE_DEFAULT_OFF
-    restore_state: true
   - platform: template
     name: 25 Inverted Shabbos Mode 
     id: inverted_shabbos_mode
     optimistic: true      # set to true for status to be updated immediately
     restore_mode: ${inverted_shabbos_mode}
-    restore_state: true
     on_turn_on:
       then:
         - logger.log: --------- on_turn_on inverted_shabbos_mode ---------"

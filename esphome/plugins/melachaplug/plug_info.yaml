@@ -29,7 +29,7 @@ switch:
     id: flash_led
     disabled_by_default: true
     optimistic: yes
-    restore_state: no
+    restore_mode: DISABLED
     on_turn_on:
     - while:
         condition:
