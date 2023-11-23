@@ -22,7 +22,7 @@ The solution is here!
 -   [x] Adaptable: All code is open source, allowing for easy tweaking, correction, and expansion.
 -   [x] Easy: Simply plug and play, and you're all set!
 
-![Web Server Screenshot](https://i.postimg.cc/ht7vKgj1/image.png)
+![Web Server Screenshot](https://github.com/chabad-source/melachaplug/blob/main/images/Web%20Server%20Screenshot.png)
 
 ## Getting Started
 
