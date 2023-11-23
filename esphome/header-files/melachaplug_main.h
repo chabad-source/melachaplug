@@ -15,7 +15,7 @@ or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
 
 #pragma once
 
-#include "../../../../header-files/hebrewcalender_melachaplug.h"
+//#include "../config/esphome/header-files/hebrewcalender_melachaplug.h"
 #include "esphome.h"
 using namespace esphome;
 using namespace time;
@@ -28,7 +28,7 @@ namespace MelachaPlug  {
 
     time_t getPlagTime() {
         ESP_LOGD("getPlagTime", "getPlagTime ran");
-        time::ESPTime date = id(sntp_time).now();
+        esphome::ESPTime date = id(sntp_time).now();
         date.hour = date.minute = date.second = 0;                          // uptime time to 00:00:00
         date.recalc_timestamp_utc();
         auto sunrise_today = id(mysun).sunrise(date, -1.583);               // time of hanetz amiti Alter Rebbe
@@ -38,8 +38,8 @@ namespace MelachaPlug  {
 
         ESP_LOGD("getPlagTime", "sunrise_today (amiti): %lu", sunrise_today->timestamp);
         ESP_LOGD("getPlagTime", "sunset_today (amiti): %lu", sunset_today->timestamp);
-        ESP_LOGD("getPlagTime", sunrise_today->strftime("sunrise_today: --- %a, %b %e, %Y, %l:%M %p ---").c_str());
-        ESP_LOGD("getPlagTime", sunset_today->strftime("sunset_today: --- %a, %b %e, %Y, %l:%M %p ---").c_str());
+        ESP_LOGD("getPlagTime", "%s", sunrise_today->strftime("sunrise_today: --- %a, %b %e, %Y, %l:%M %p ---").c_str());
+        ESP_LOGD("getPlagTime", "%s", sunset_today->strftime("sunset_today: --- %a, %b %e, %Y, %l:%M %p ---").c_str());
         ESP_LOGD("getPlagTime", "shaahzmanis: %f", shaahzmanis);
         ESP_LOGD("getPlagTime", "plag timestamp: %lu", plag);
         return plag;
@@ -66,7 +66,7 @@ namespace MelachaPlug  {
         int offset_minutes;
         time_t timestamp_sunset;
 
-        time::ESPTime date = id(sntp_time).now();                    // we use this variable later
+        esphome::ESPTime date = id(sntp_time).now();                    // we use this variable later
         time_t timestamp_now = date.timestamp;                       // save the current timestamp before updating the date
         struct tm tm_time_now = date.to_c_tm();
         Hdate::current_hdate = convertDate(tm_time_now);             // convert current english date to the hebrew date
@@ -92,7 +92,7 @@ namespace MelachaPlug  {
             date.hour = date.minute = date.second = 0;                          // uptime time to 00:00:00
             date.recalc_timestamp_utc();
             auto sunset_today = id(mysun).sunset(date, elevation_deg);          // get sunset time at specified degree
-            ESP_LOGD("updateHdate", sunset_today->strftime("sunset_today: --- %a, %b %e, %Y, %l:%M %p ---").c_str());
+            ESP_LOGD("updateHdate", "%s", sunset_today->strftime("sunset_today: --- %a, %b %e, %Y, %l:%M %p ---").c_str());
             timestamp_sunset = sunset_today->timestamp;
         }
         ESP_LOGD("updateHdate", "timestamp_now: %lu", timestamp_now);
