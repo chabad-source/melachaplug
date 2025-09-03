@@ -15,6 +15,7 @@ esphome:
 http_request:
   useragent: esphome/device
   timeout: 10s
+  verify_ssl: false
 
 text_sensor:
   # text sensor to display the location 
