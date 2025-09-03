@@ -5,7 +5,8 @@ switch:
   - platform: gpio
     name: 20 Relay 1
     id: relay_1
-    pin: ${relay_1_gpio}
+    pin:
+      number: ${relay_1_gpio}
     restore_mode: ${relay_restore_mode}  # defaults to on
     on_turn_on:
       then:
@@ -16,9 +17,11 @@ switch:
 
   # switch which can disable the button
   - platform: gpio
+    pin:
+      number: ${button_1_gpio}
+      allow_other_uses: true
     name: 21 Enable Button 1
     id: enable_button_1
-    pin: ${button_1_gpio}
     internal: true
     inverted: false
     restore_mode: ALWAYS_OFF         # defaults to off in case of reset on Shabbos or Yom Tov
@@ -50,7 +53,8 @@ switch:
     name: 23 Built-in LED
     disabled_by_default: true
     id: built_in_led
-    pin: ${built_in_led_gpio}
+    pin:
+      number: ${built_in_led_gpio}
     restore_mode: ${relay_restore_mode}    # defaults to the same as the relay
     inverted: ${led_inverted}
 
@@ -60,6 +64,7 @@ binary_sensor:
     pin:
       number: ${button_1_gpio}
       mode: INPUT_PULLUP
+      allow_other_uses: true
       inverted: true
     filters:
       - delayed_on: 10ms
