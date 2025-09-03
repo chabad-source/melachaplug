@@ -7,7 +7,7 @@ esphome:
   # name_add_mac_suffix: true
   project:
     name: chabad-source.melachaplug
-    version: "2023.10.13.0"
+    version: "2025.09.02.0"
   on_boot:
     - priority: 800                      # This is where all hardware initialization of vital components is executed
       then:
@@ -19,6 +19,7 @@ preferences:
 
 # Enable Over The Air updates
 ota:
+  - platform: esphome
 
 # Enable fallback hotspot
 captive_portal:
@@ -98,7 +99,7 @@ switch:
         - logger.log: --------- on_turn_off early_shabbos ---------"
         - lambda: 'MelachaPlug::runMelachaChecks();'
   - platform: template
-    name: 18 Override Shabbos Mode 
+    name: 18 Override Shabbos Mode
     id: override_shabbos_mode
     optimistic: true      # set to true for status to be updated immediately
     restore_mode: RESTORE_DEFAULT_OFF
